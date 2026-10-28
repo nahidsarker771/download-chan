@@ -32,6 +32,15 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
 
+            <!-- Open http/https links directly with Download Chan -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+
         </activity>
 
         <provider
@@ -48,4 +57,6 @@
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Save directly into the public Downloads/Download Chan folder (sideloaded app). -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 </manifest>

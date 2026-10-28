@@ -1,65 +1,68 @@
-# Download-Chan
+# Download Chan
 
-A share-to-download Android app. Share (or paste) a link from **YouTube, TikTok,
-Instagram, Facebook, Douyin, Reels, X/Twitter, Vimeo, Reddit** and more — the app
-saves the video (or extracts MP3 audio) to your device.
+A simple Android download manager that just works. Copy a link, open the app, and
+it starts downloading. Share or open a link with Download Chan and it starts too.
 
-Built with **Capacitor 6** (HTML/CSS/JS UI) + a native Java layer that bundles
-**yt-dlp** via [youtubedl-android](https://github.com/yausername/youtubedl-android),
-so extraction runs entirely offline with no server.
+Supports YouTube, Instagram, Facebook, TikTok, Douyin, X/Twitter, Vimeo, Reddit
+and direct files (MP4, MKV, MP3, ZIP, APK, PDF...). Video downloads as MP4, audio
+can be extracted as MP3.
 
-## The 4 tabs
+## Features
 
-| Tab | What it does |
-|---|---|
-| **Download** | Main screen. Auto-fills from a shared link and starts. Video / Audio(MP3) toggle + quality picker. Live progress, queue, cancel. |
-| **Library** | Every saved file — open, share, or delete. |
-| **Browse** | Quick-launch buttons for supported sites, plus a "send this link to Download" box. |
-| **Settings** | Default mode/quality, save folder, engine status, version, source link. |
-
-## How it works
-
-1. In any app, tap **Share → Download-Chan**. Android delivers the link via an
-   `ACTION_SEND` intent (`MainActivity` → `DownloaderPlugin`).
-2. The URL is handed to the web UI, which calls the native `Downloader` plugin.
-3. `DownloaderPlugin` runs bundled yt-dlp + ffmpeg and streams progress events
-   back to JS. Finished files land in the app's private Downloads folder.
+- **Clipboard auto-download** — a copied link is detected on launch/resume and starts
+  automatically (can be turned off in Settings, 24 h duplicate guard).
+- **Downloads/Download Chan** — saves to the public Downloads folder when Android
+  "All files access" is granted; otherwise uses the app-private folder and asks nicely.
+- **Multi-thread engine** — 1–16 parallel connections for direct links, ADM/1DM style,
+  with automatic single-connection fallback when the server does not support ranges.
+- **yt-dlp for social sites** — bundled extractor + ffmpeg, no server needed; engine can
+  update itself. Concurrent fragments use the same Connections setting.
+- **Cookies import** — import a `cookies.txt` from your browser for private/login-walled
+  Facebook and Instagram posts.
+- **Share sheet + link opener** — receives `ACTION_SEND` text links and opens http/https
+  links directly.
+- **Clean 3-tab UI** — Home, Files, Settings. Compact download cards and file rows with
+  expandable Details, queue/cancel/retry, copy error details, open/share/delete files.
 
 ## Build
 
 ```bash
 cd "project files/downloadchan"
 source env.sh          # JDK 17 + Android SDK
-./build-apk.sh         # reads VERSION, cap sync, gradlew assembleDebug, copies APK, bumps VERSION
+./build-apk.sh         # VERSION -> cap sync -> gradlew assembleDebug -> APK
 ```
 
 Output: `project files/apk/Download-Chan-v<version>.apk`.
-Requires **JDK 17** (Gradle 8.2). ABI filters limit the build to `arm64-v8a` +
-`armeabi-v7a`.
+Requires **JDK 17** (Gradle 8.2). ABI filters: `arm64-v8a` + `armeabi-v7a`.
 
 ## Layout
 
 ```
 project files/downloadchan/
-├── www/                    ← the UI (edit here)
+├── www/                    ← web UI
 │   ├── index.html
 │   ├── css/style.css
 │   └── js/{app,native}.js
-├── android/                ← Capacitor Android project + native plugin
+├── android/                ← Capacitor Android + native plugin
 │   └── app/src/main/java/com/downloadchan/app/
-│       ├── MainActivity.java       (share-intent receiver)
-│       └── DownloaderPlugin.java   (yt-dlp bridge)
+│       ├── MainActivity.java       (share/view intent receiver)
+│       └── DownloaderPlugin.java   (yt-dlp + multi-thread + storage + cookies)
 ├── env.sh · build-apk.sh · VERSION
 ```
 
-Regenerate web assets into the APK with `npx cap sync android` (done automatically
-by `build-apk.sh`).
+## Permissions
+
+- `INTERNET` / `ACCESS_NETWORK_STATE` — downloads and engine updates.
+- `MANAGE_EXTERNAL_STORAGE` — writes to the public `Download/Download Chan` folder.
+  This is a sideload-only permission. If denied, the app still works in its private
+  folder (files are removed if you uninstall).
 
 ## Notes / limitations
 
-- Download only content you own or have permission to save. Respect each site's
-  terms and local copyright law.
-- Facebook/Instagram sometimes require login cookies; those private/age-gated
-  posts may fail.
-- Debug builds are signed with the debug keystore. For an installable release,
-  create a keystore and a release variant.
+- Download only content you own or have permission to save. Respect each site's terms
+  and local copyright law.
+- Private/login-walled Facebook and Instagram posts need cookies.txt; public ones can
+  work without it. Some sites may still block automated access.
+- Multi-thread only applies to direct files whose server supports HTTP Range.
+- APKs here are debug-signed. For a release build, create a keystore and a release
+  variant.

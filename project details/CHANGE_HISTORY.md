@@ -200,3 +200,178 @@ ERROR: [facebook] 1413081230459468: Cannot parse data; please report this issue 
 ### Next (optional)
 - **Cookies support** (import a `cookies.txt` or in-app WebView login → `--cookies`) is
   the real fix for login-walled Facebook/Instagram. Not yet implemented.
+
+---
+
+## Session 6 — v2.0 from-scratch rebuild: clipboard auto-download, public folder, multi-thread, cookies
+
+### Prompt (verbatim)
+> now see download chan and build it from scrach i need thos funtation when i open the app automaticly grap link from clip board and start downloading and if download is not specifed or set defult download is download folder with afolder name download chan any link download able fb insta youtube any and add setting for multi thred downlalod like adm or 1dm download manager give is morder look and simple just woork tool ok
+
+### Decisions
+- **Rebuilt the app as v2.0** (same package `com.downloadchan.app` so it installs over
+  v1.5). New 3-tab UI (Home / Files / Settings) and a much larger native engine.
+- **Save folder:** public `Downloads/Download Chan` when Android "All files access" is
+  granted; otherwise falls back to the app-private folder. A first-run sheet + banner
+  ask for access. Old v1.5 files in the private `Download-Chan` folder are still listed.
+- **Clipboard:** native `getClipboard` bridge; on launch/resume a link is detected and
+  auto-downloaded (setting on by default). Dedupe window = 24 h per URL; the same link
+  will not auto-download again after a restart. Manual Download always works.
+- **Engine choice:** known video/social hosts → yt-dlp; other links are probed and direct
+  media files go through the new native **segmented HTTP range engine** (true multi-thread).
+- **Multi-thread:** Settings → Connections 1–16 (default 8). Direct files split into N
+  range chunks; servers without Range fall back to a single stream. yt-dlp gets
+  `--concurrent-fragments N`.
+- **Login walls:** added **cookies.txt import** (SAF picker) → passed to yt-dlp
+  `--cookies`. This is the real fix path for private Facebook/Instagram.
+- Online resolver fallback kept in Advanced, now **off by default** (privacy).
+
+### What was built
+- `DownloaderPlugin.java` rewritten (~1,000 lines):
+  - `downloadAuto` route: direct segmented downloader vs yt-dlp.
+  - `probe()` / `directDownload()` / `segmentedDownload()` / `singleStream()`; progress
+    with bytes, total, speed, ETA; range fallback; cancel support.
+  - `storageStatus`, `requestStorage` (opens All-files-access settings), `openFolder`.
+  - `getClipboard`, `cookiesStatus`, `pickCookies` (@ActivityCallback SAF import),
+    `clearCookies`.
+  - `listFiles` merges public + private + legacy folders; per-file `dir`; robust delete.
+  - yt-dlp jobs use a unique `.job_<id>` subfolder, then move the produced file into the
+    real folder — no more "newest file in folder" mix-ups.
+  - yt-dlp progress now emits estimated bytes + speed; `--concurrent-fragments N`; cookies.
+  - Kept `updateEngine`, `getInfo`, `downloadRemote`; `download` aliases `downloadAuto`.
+- `MainActivity.java`: ACTION_VIEW + ClipData fallback for shared text.
+- `AndroidManifest.xml`: `MANAGE_EXTERNAL_STORAGE`; VIEW intent filter for http/https
+  (open links directly with Download Chan); existing SEND filter preserved.
+- `strings.xml` / `styles.xml`: app name **Download Chan**; dark status/navigation bars.
+- `www/` rewritten from scratch:
+  - `index.html` — modern dark UI, 3 tabs, storage permission sheet, error card.
+  - `css/style.css` — new violet/mint design, safe-area bottom nav, switches, stepper.
+  - `js/app.js` — clipboard auto-flow, queue, progress/speed, storage + cookies UI,
+    retries, copy error, recent files, engine auto-update.
+  - `js/native.js` — wrappers for all new native methods.
+- APK: `project files/apk/Download-Chan-v2.0.apk`
+  - 108,128,348 bytes (~104 MB), versionCode 20000, versionName 2.0.
+  - SHA-256 `a5c1df52b9a1456155a93ed2e9a35a6a09c5a480ddbc3e2d46b05825f525c52e`.
+  - Debug-signed. `VERSION` now 2.1 for the next build.
+
+### Verification
+- `./build-apk.sh 2.0` succeeds (Gradle assembleDebug).
+- APK manifest verified: label `Download Chan`, minSdk 30/target 34,
+  `MANAGE_EXTERNAL_STORAGE`, SEND + VIEW http/https filters.
+- New `www` assets verified inside the APK; JS passes `node --check`;
+  Home/Settings rendered in headless Chromium at 390×844 (no JS errors).
+- **Not device-tested** — no adb device/emulator attached this session.
+
+### Known limits
+- Private/login-walled Facebook & Instagram still need a valid cookies.txt; public
+  posts are handled by yt-dlp + engine update.
+- Multi-thread only applies to direct HTTP(S) files whose server supports Range.
+- All-files access is required for the public Downloads folder; without it the app
+  works but saves in the app-private folder.
+- `MANAGE_EXTERNAL_STORAGE` is a sideload permission (Play Store would reject it).
+
+---
+
+## Session 7 — v2.0.1: Facebook videos downloaded without audio
+
+### Prompt (verbatim)
+> app works but the fb link donlowd video has no audio chack issu and fix it
+
+### Root cause
+- The app called only `YoutubeDL.getInstance().init()` and never initialized the bundled
+  FFmpeg package.
+- Social downloads (Facebook Reels/DASH, YouTube, etc.) arrive as **separate video and
+  audio streams**; yt-dlp merges them with FFmpeg. With FFmpeg uninitialized, the merge
+  cannot run, so yt-dlp leaves the video-only stream and the app saved that file — the
+  picture played but had no sound.
+- The library requires `FFmpeg.getInstance().init(context)` after `YoutubeDL.init()`
+  (confirmed in the youtubedl-android README). `libffmpeg.so` also needs the `libav*.so`
+  libraries that the FFmpeg package extracts; YoutubeDL's environment already points at
+  that extraction directory, so initializing FFmpeg makes merging work.
+- v1.5 had the same latent bug (only YouTube/TikTok muxed formats hid it).
+
+### Fix
+- `DownloaderPlugin.java`: import `com.yausername.ffmpeg.FFmpeg`.
+- `ensureInit()` now runs `YoutubeDL.init()` **then** `FFmpeg.getInstance().init()`.
+  FFmpeg init failures are logged but do not break the app (`Log.e`), so muxed formats
+  still download even on a damaged install.
+- No selector change was needed: `bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b` +
+  `--merge-output-format mp4` produces a single MP4 with AAC audio once FFmpeg works.
+
+### Build / verification
+- Built **v2.0.1** (versionCode 20001) over v2.0; `VERSION` now 2.0.2.
+  - `project files/apk/Download-Chan-v2.0.1.apk`
+  - 108,075,672 bytes, SHA-256
+    `822aa6745901644b543acaf48202f4a67ed55a98fcfe48ea087dd81ac7ae977d`.
+- `aapt` confirms versionName 2.0.1 / code 20001, label `Download Chan`, minSdk 30,
+  target 34. DEX contains `com/yausername/ffmpeg/FFmpeg`; ffmpeg/ffprobe libs packaged.
+- Not device-tested (still no adb device/emulator). Existing no-audio files must be
+  deleted and downloaded again.
+
+### User-facing
+- Install v2.0.1 over v2.0, then download the Facebook link again: it should now merge
+  video + audio into one MP4. First yt-dlp operation may take a few extra seconds while
+  the FFmpeg package extracts on first use.
+
+---
+
+## Session 8 — v2.1.0: clean UI refresh + progressive "details" levels
+
+### Prompt (verbatim)
+> video audio works now polish the app and leveling simple and clean so detals levels
+
+### Context
+- User confirmed the v2.0.1 Facebook/social audio fix works.
+- Interpreted "details levels" as progressive disclosure: compact summaries first,
+  expandable details only when wanted. No native engine behavior changes were needed.
+
+### What was built
+- `www/index.html`, `www/css/style.css`, `www/js/app.js` redesigned:
+  - neutral near-black theme with indigo accent (removed the old violet/mint look);
+  - Home: "Download anything", compact link input, Video/Audio segment, quality
+    dropdown, one primary Download button;
+  - active job: compact title/status/progress/speed/ETA plus one card-level Cancel;
+  - job Details expander: Link, Type, Quality, Connections, Save to, Size, Status;
+  - failures: concise error preview with Retry/Dismiss; full error + Copy error in Details;
+  - Files: folder card, file rows with open + details chevron; Details shows Path, Type,
+    Size, Saved plus Share/Delete;
+  - Settings: grouped Downloads / Save location / Login cookies / Engine; Advanced
+    fallback/resolver collapsed by default;
+  - fixed bottom Home/Files/Settings nav with an active pill.
+- Polish fixes:
+  - removed the duplicate section-header Cancel button; only the card action remains;
+  - job titles now prefer the completed filename, then a URL filename, then hostname
+    (instead of showing a raw path such as `facebook.com/watch/`);
+  - result heading supports Active download / Download complete / Last download;
+  - native status/navigation bars aligned to `#0A0B0F`.
+
+### Verification
+- `node --check` passes for `app.js` and `native.js`.
+- Headless Chromium: no JS errors; no horizontal overflow at 390×844 or 360×800.
+  Checked Home active/progress, expanded job details, failure, Files, expanded file
+  details, Settings, and expanded Advanced settings.
+- Preview-only `window.__dcPreview` hooks live in `/tmp/opencode/dcprev`; production
+  `www/` has no debug hooks.
+- Built v2.1.0 (versionCode 20100), 108,077,112 bytes, SHA-256
+  `e2352d1d65b20b84e5964c52e6f4f7eabbe07bb1f43e4d4f967c7483378dc369`.
+  `aapt` confirms versionName 2.1.0 / code 20100; APK assets contain the new UI and no
+  `cancel-all`; `VERSION` now 2.1.1.
+- Not device-tested (still no adb device/emulator).
+
+### User-facing
+- Install v2.1.0 over v2.0.1; downloads, cookies, storage and the audio fix are unchanged.
+  The UI is cleaner and details are collapsed until tapped.
+
+---
+
+## Session 9 — publish v2.1.0 source
+
+### Prompt (verbatim)
+> works now push update
+
+### Result
+- User confirmed v2.1.0 works on-device.
+- Committed the v2.0/v2.0.1/v2.1.0 source and documentation, then pushed `main` to
+  https://github.com/nahid77777771-maker/download-chan.
+- APK files remain gitignored; the v2.1.0 build is unchanged at
+  `project files/apk/Download-Chan-v2.1.0.apk`.

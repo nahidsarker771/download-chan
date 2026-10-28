@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0f1220" />
-  <title>Download-Chan</title>
+  <meta name="theme-color" content="#0a0b0f" />
+  <meta name="color-scheme" content="dark" />
+  <title>Download Chan</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -12,93 +13,52 @@
 <div class="app">
   <header class="topbar">
     <div class="brand">
-      <span class="logo">DC</span>
-      <h1>Download-Chan</h1>
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 20h14"/>
+        </svg>
+      </div>
+      <div class="brand-copy">
+        <h1>Download Chan</h1>
+        <div id="status-line" class="status-line">Ready</div>
+      </div>
     </div>
-    <span id="engine-badge" class="badge">engine…</span>
+    <button id="engine-pill" class="pill" aria-label="Engine status">
+      <span class="dot"></span>
+      <span id="engine-text">Starting</span>
+    </button>
   </header>
 
   <main id="views">
 
-    <!-- ============ DOWNLOAD ============ -->
-    <section id="tab-download" class="tab active">
-      <div class="card">
-        <label class="lbl" for="url">Link</label>
-        <textarea id="url" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false"
-          placeholder="Paste a YouTube / TikTok / Instagram / Facebook / Douyin / Reels link…"></textarea>
-        <div class="row">
-          <button id="paste" class="btn ghost">Paste</button>
-          <button id="clear" class="btn ghost">Clear</button>
+    <!-- ================= HOME ================= -->
+    <section id="tab-home" class="tab active">
+      <div class="home-intro">
+        <h2>Download anything</h2>
+        <p>Paste a link, or share one from another app.</p>
+      </div>
+
+      <div class="input-card">
+        <textarea id="url" rows="2" autocomplete="off" autocapitalize="off" spellcheck="false"
+          placeholder="https://youtube.com/...  or any link"></textarea>
+        <div class="input-tools">
+          <button id="paste" class="chip-btn">
+            <svg viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M8 5H5v16h14V5h-3"/></svg>
+            Paste
+          </button>
+          <button id="clear" class="icon-btn small" aria-label="Clear link">
+            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
         </div>
       </div>
 
-      <div class="card">
+      <div class="options-row">
         <div class="seg" id="mode-seg">
           <button class="seg-btn active" data-mode="video">Video</button>
-          <button class="seg-btn" data-mode="audio">Audio (MP3)</button>
+          <button class="seg-btn" data-mode="audio">Audio</button>
         </div>
-
-        <div id="quality-wrap">
-          <label class="lbl" for="quality">Quality</label>
-          <select id="quality">
-            <option value="best">Best available</option>
-            <option value="1080">1080p or lower</option>
-            <option value="720">720p or lower</option>
-            <option value="480">480p or lower</option>
-            <option value="360">360p or lower</option>
-          </select>
-        </div>
-      </div>
-
-      <button id="download" class="btn primary big">Download</button>
-      <p class="hint" id="dl-hint">Tip: share a link from any app — it lands here and starts automatically.</p>
-
-      <div id="last-error" class="last-error hidden">
-        <div class="le-head">
-          <span>Last error</span>
-          <span>
-            <button id="le-copy" class="btn ghost small">Copy</button>
-            <button id="le-close" class="btn ghost small">✕</button>
-          </span>
-        </div>
-        <pre id="le-msg" class="mono small"></pre>
-      </div>
-
-      <div id="active"></div>
-      <div id="queue"></div>
-    </section>
-
-    <!-- ============ LIBRARY ============ -->
-    <section id="tab-library" class="tab">
-      <div class="row between">
-        <h2>Downloads</h2>
-        <button id="refresh" class="btn ghost small">Refresh</button>
-      </div>
-      <div id="files" class="list"></div>
-    </section>
-
-    <!-- ============ BROWSE ============ -->
-    <section id="tab-browse" class="tab">
-      <p class="hint">Open a site to find a video, then tap <b>Share → Download-Chan</b>. Or paste a link below.</p>
-      <div id="sites" class="sites"></div>
-      <div class="card">
-        <label class="lbl" for="jump-url">Have a link?</label>
-        <input id="jump-url" type="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://…" />
-        <button id="jump" class="btn primary">Send to Download tab</button>
-      </div>
-    </section>
-
-    <!-- ============ SETTINGS ============ -->
-    <section id="tab-settings" class="tab">
-      <div class="card">
-        <label class="lbl">Default mode</label>
-        <div class="seg" id="def-mode-seg">
-          <button class="seg-btn active" data-defmode="video">Video</button>
-          <button class="seg-btn" data-defmode="audio">Audio</button>
-        </div>
-        <label class="lbl" style="margin-top:14px">Default quality</label>
-        <select id="def-quality">
-          <option value="best">Best available</option>
+        <select id="quality" aria-label="Quality">
+          <option value="best">Best quality</option>
           <option value="1080">1080p or lower</option>
           <option value="720">720p or lower</option>
           <option value="480">480p or lower</option>
@@ -106,56 +66,241 @@
         </select>
       </div>
 
-      <div class="card">
-        <label class="lbl">Online fallback</label>
-        <label class="row" style="align-items:center;gap:10px;cursor:pointer">
-          <input type="checkbox" id="remote-on" style="width:auto" />
-          <span>If the built-in engine fails, download via an online service</span>
-        </label>
-        <label class="lbl" style="margin-top:14px">Online resolver</label>
-        <input id="resolver" type="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://gendownload.com" />
-        <p class="hint">The link is sent to this service to resolve a direct download. Use only with trusted services.</p>
+      <button id="download" class="primary-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 20h14"/></svg>
+        Download
+      </button>
+
+      <div id="clip-banner" class="notice hidden">
+        <div class="notice-icon">
+          <svg viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M8 5H5v16h14V5h-3"/></svg>
+        </div>
+        <div class="notice-copy">
+          <b>Link found in clipboard</b>
+          <span id="clip-text">Tap Download to save it.</span>
+        </div>
+        <button id="clip-download" class="notice-btn">Download</button>
       </div>
 
-      <div class="card">
-        <label class="lbl">Save folder</label>
-        <p id="folder" class="mono small">—</p>
-        <p class="hint">Files are stored in the app's private Downloads folder. Use Library → Share to send them anywhere.</p>
+      <div id="storage-banner" class="notice warn hidden">
+        <div class="notice-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </div>
+        <div class="notice-copy">
+          <b>Using a private folder</b>
+          <span>Allow access to save in Downloads / Download Chan.</span>
+        </div>
+        <button id="banner-grant" class="notice-btn">Allow</button>
       </div>
 
-      <div class="card">
-        <div class="row between"><span>Version</span><span id="appver" class="mono">1.0.0</span></div>
-        <div class="row between"><span>Engine</span><span id="engine-detail" class="mono">—</span></div>
-        <button id="update-engine" class="btn ghost" style="margin-top:12px">Update download engine</button>
-        <p class="hint">Fetches the latest yt-dlp (fixes many extraction errors). Needs internet.</p>
+      <section id="active-wrap" class="stack hidden">
+        <div class="section-head">
+          <h3>Active download</h3>
+        </div>
+        <div id="active" class="list"></div>
+      </section>
+
+      <section id="queue-wrap" class="stack hidden">
+        <div class="section-head"><h3>Up next</h3><span id="queue-count" class="count"></span></div>
+        <div id="queue" class="list"></div>
+      </section>
+
+      <section id="recent-wrap" class="stack hidden">
+        <div class="section-head"><h3>Recent</h3><button id="see-all" class="text-btn">See all</button></div>
+        <div id="recent" class="list"></div>
+      </section>
+
+      <div id="home-empty" class="empty-inline">
+        <svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 20h14"/></svg>
+        <span>No downloads yet. Paste or share a link to start.</span>
+      </div>
+    </section>
+
+    <!-- ================= FILES ================= -->
+    <section id="tab-files" class="tab">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Library</div>
+          <h2>Files</h2>
+        </div>
+        <button id="refresh" class="icon-btn" aria-label="Refresh">
+          <svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+        </button>
       </div>
 
-      <div class="card">
-        <button id="open-github" class="btn ghost">Source code on GitHub</button>
-        <p class="hint">Download only content you own or have permission to save. Respect each site's terms and local copyright law.</p>
+      <div class="folder-card">
+        <div class="folder-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </div>
+        <div class="folder-copy">
+          <div class="folder-title">Download Chan</div>
+          <div id="folder-path" class="folder-path">—</div>
+        </div>
+        <span id="folder-state" class="badge">—</span>
+      </div>
+
+      <div id="files" class="list"></div>
+      <div id="files-empty" class="empty-state">
+        <div class="empty-art">
+          <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </div>
+        <b>Nothing here yet</b>
+        <span>Downloaded videos and audio will appear here.</span>
+      </div>
+    </section>
+
+    <!-- ================= SETTINGS ================= -->
+    <section id="tab-settings" class="tab">
+      <div class="page-head">
+        <div>
+          <div class="eyebrow">Preferences</div>
+          <h2>Settings</h2>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="group-label">Downloads</div>
+
+        <div class="setting-row">
+          <div class="setting-copy">
+            <div class="setting-title">Clipboard auto-download</div>
+            <div class="setting-desc">Start when a copied link is found.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="auto-clip" checked />
+            <span></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-copy">
+            <div class="setting-title">Connections</div>
+            <div class="setting-desc">Parallel threads for direct links.</div>
+          </div>
+          <div class="stepper">
+            <button type="button" data-step="-1" aria-label="Fewer connections">−</button>
+            <input type="number" id="threads" min="1" max="16" value="8" inputmode="numeric" />
+            <button type="button" data-step="1" aria-label="More connections">+</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-copy">
+            <div class="setting-title">Default format</div>
+            <div class="setting-desc">Video keeps picture; audio extracts MP3.</div>
+          </div>
+          <div class="seg small" id="def-mode-seg">
+            <button class="seg-btn active" data-defmode="video">Video</button>
+            <button class="seg-btn" data-defmode="audio">Audio</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-copy">
+            <div class="setting-title">Default quality</div>
+          </div>
+          <select id="def-quality">
+            <option value="best">Best</option>
+            <option value="1080">1080p</option>
+            <option value="720">720p</option>
+            <option value="480">480p</option>
+            <option value="360">360p</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="group-label">Save location</div>
+        <div class="path-box">
+          <div id="folder" class="path-value">—</div>
+          <div id="storage-status" class="path-state">Checking…</div>
+        </div>
+        <button id="grant-storage" class="secondary-btn">Allow Downloads access</button>
+        <button id="open-folder" class="ghost-btn">Open folder</button>
+      </div>
+
+      <div class="settings-group">
+        <div class="group-label">Login cookies</div>
+        <p class="group-desc">For private Facebook or Instagram posts, import a <b>cookies.txt</b> exported from your browser.</p>
+        <div id="cookie-state" class="cookie-state">No cookies imported</div>
+        <button id="pick-cookies" class="secondary-btn">Import cookies.txt</button>
+        <button id="clear-cookies" class="ghost-btn">Remove cookies</button>
+      </div>
+
+      <div class="settings-group">
+        <div class="group-label">Engine</div>
+        <div class="setting-row">
+          <div class="setting-copy">
+            <div class="setting-title">yt-dlp</div>
+            <div id="engine-detail" class="setting-desc">Bundled engine · updates fix site changes</div>
+          </div>
+          <span id="engine-status" class="badge">—</span>
+        </div>
+        <button id="update-engine" class="secondary-btn">Update engine</button>
+      </div>
+
+      <details class="settings-group collapse">
+        <summary class="collapse-summary">
+          <div class="collapse-copy">
+            <div class="group-label">Advanced</div>
+            <div class="collapse-desc">Online fallback and resolver</div>
+          </div>
+          <svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="collapse-body">
+          <div class="setting-row">
+            <div class="setting-copy">
+              <div class="setting-title">Online fallback</div>
+              <div class="setting-desc">Try a third-party resolver if the local engine fails. Privacy risk — off by default.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="remote-on" />
+              <span></span>
+            </label>
+          </div>
+          <div id="resolver-wrap" class="resolver-wrap hidden">
+            <input id="resolver" class="text-input" type="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://gendownload.com" />
+          </div>
+        </div>
+      </details>
+
+      <div class="about">
+        <div class="about-row">
+          <span>Download Chan <b id="appver">2.1.0</b></span>
+          <button id="open-github" class="text-btn">GitHub</button>
+        </div>
+        <p>Download only content you own or have permission to save. Respect each site's terms and local law.</p>
       </div>
     </section>
 
   </main>
 
   <nav class="tabbar">
-    <button class="tabbtn active" data-tab="download">
-      <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
-      <span>Download</span>
+    <button class="tabbtn active" data-tab="home">
+      <svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 20h14"/></svg>
+      <span>Home</span>
     </button>
-    <button class="tabbtn" data-tab="library">
-      <svg viewBox="0 0 24 24"><path d="M4 5h16v4H4zM4 13h16v6H4z"/></svg>
-      <span>Library</span>
-    </button>
-    <button class="tabbtn" data-tab="browse">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"/></svg>
-      <span>Browse</span>
+    <button class="tabbtn" data-tab="files">
+      <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span>Files</span>
     </button>
     <button class="tabbtn" data-tab="settings">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10l2 2M19 5l-2 2M7 17l-2 2"/></svg>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
       <span>Settings</span>
     </button>
   </nav>
+</div>
+
+<div id="storage-modal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-art">
+      <svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    </div>
+    <h3>Save to Downloads?</h3>
+    <p>Allow access so downloads go to <b>Downloads / Download Chan</b> and stay after you uninstall the app.</p>
+    <button id="modal-allow" class="primary-btn">Allow access</button>
+    <button id="modal-skip" class="ghost-btn">Not now</button>
+  </div>
 </div>
 
 <div id="toast" class="toast"></div>

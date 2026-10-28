@@ -1,4 +1,4 @@
-# Download-Chan — APK Build Instructions
+# Download Chan — APK Build Instructions
 
 **Tech stack:** vanilla HTML/CSS/JS UI (`www/`) wrapped with **Capacitor 6** for
 Android, plus a native Java bridge that bundles **yt-dlp** via
@@ -15,7 +15,7 @@ downloadchan/
 ├── www/                    # the whole UI (opens in any browser)
 │   ├── index.html
 │   ├── css/style.css
-│   └── js/ native.js · app.js
+│   └── js/{native,app}.js
 └── android/                # Capacitor Android project + native plugin
     └── app/src/main/java/com/downloadchan/app/
         ├── MainActivity.java        # share-intent receiver
@@ -51,7 +51,7 @@ cd android && ./gradlew assembleDebug
 cd downloadchan
 source env.sh
 ./build-apk.sh          # builds VERSION, names APK Download-Chan-v<ver>.apk, bumps VERSION
-./build-apk.sh 2.0      # optional: force a specific version
+./build-apk.sh 2.1.0    # optional: force a specific version
 ```
 It: (1) reads `VERSION`, (2) writes `versionName`/`versionCode` into
 `android/app/build.gradle`, (3) runs `npx cap sync android` + `./gradlew assembleDebug`,
@@ -72,10 +72,10 @@ youtubedl-android loads its bundled Python/FFmpeg `.so` files from
 - `android/app/src/main/AndroidManifest.xml`: `android:extractNativeLibs="true"`
 - `android/app/build.gradle`: `packagingOptions { jniLibs { useLegacyPackaging = true } }`
 
-## Share target
-`AndroidManifest.xml` declares an `ACTION_SEND` (`text/plain`) intent-filter on
-`MainActivity`; shared links arrive via `DownloaderPlugin.setPendingShare()` and the
-`sharedUrl` event.
+## Share / link targets
+`AndroidManifest.xml` declares an `ACTION_SEND` (`text/plain`) intent-filter and a
+`VIEW` filter for http/https links on `MainActivity`; links arrive via
+`DownloaderPlugin.setPendingShare()` and the `sharedUrl` event.
 
 ## Icons / splash
 Icon art is authored as SVG in `../../project details/icon/` and rasterized into all
@@ -84,4 +84,8 @@ screens are gradient + centered logo under `res/drawable*/splash.png`.
 
 ## Notes
 - Only download content you own or have rights to save. Respect each site's terms.
-- Facebook/Instagram gated posts may require login cookies (not supported yet).
+- Private/login-walled Facebook/Instagram posts need a browser-exported `cookies.txt`
+  imported from Settings. Public posts can work without it.
+- Public `Downloads/Download Chan` requires the sideload-only All-files-access
+  permission; otherwise the app falls back to its private folder.
+- Direct HTTP(S) files use 1–16 parallel range connections when the server supports it.

@@ -29,6 +29,10 @@ public class MainActivity extends BridgeActivity {
             if (text == null && intent.getData() != null) {
                 text = intent.getData().toString();
             }
+            if (text == null && intent.getClipData() != null && intent.getClipData().getItemCount() > 0) {
+                CharSequence cs = intent.getClipData().getItemAt(0).coerceToText(this);
+                if (cs != null) text = cs.toString();
+            }
             if (text != null && !text.trim().isEmpty()) {
                 DownloaderPlugin.setPendingShare(text);
                 DownloaderPlugin.emitShareToJs(text);

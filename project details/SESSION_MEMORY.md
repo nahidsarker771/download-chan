@@ -1,20 +1,22 @@
-# Download-Chan — Session Memory (resume playbook)
+# Download Chan — Session Memory (resume playbook)
 > Read this FIRST in any new session. Update at the END of every session.
 
-**Last dump:** Session 5 · v1.5
-**Next build will be:** v1.6
+**Last dump:** Session 9 · v2.1.0 (UI confirmed, source pushed)
+**Next build will be:** v2.1.1 (`VERSION` already 2.1.1)
 
 ---
 
 ## 1. Identity
-- **Project:** Download-Chan — Android share-to-download app. Share/paste a link
-  (YouTube, TikTok, Instagram, Facebook, Douyin, Reels, X, Vimeo, Reddit…), it
-  saves the video or extracts MP3 audio.
-- **Stack:** Capacitor 6 (vanilla HTML/CSS/JS in `www/`) wrapped for Android, plus
-  a native Java bridge that bundles **yt-dlp** (youtubedl-android 0.18.1).
-- **Package:** `com.downloadchan.app` · **App name:** Download-Chan.
-- **Repo (intended):** https://github.com/nahid77777771-maker/download-chan
-- Language of prompts: English. Replies: English.
+- **Project:** Download Chan — Android download manager. Copy/share/open any link
+  (YouTube, Instagram, Facebook, TikTok, Douyin, direct files…) and save it.
+- **Stack:** Capacitor 6 (vanilla HTML/CSS/JS in `www/`) + native Java bridge.
+  - yt-dlp bundled for social/video sites (`youtubedl-android 0.18.1` + ffmpeg).
+  - New native segmented HTTP engine for direct files (ADM/1DM-style multi-thread).
+- **Package:** `com.downloadchan.app` (unchanged, so v2.1.0 installs over older builds).
+- **App name:** `Download Chan` (space). **Version:** 2.1.0 (versionCode 20100).
+- **Repo:** https://github.com/nahid77777771-maker/download-chan (main; v2.1.0 source
+  pushed 2026-10-28). APKs are gitignored and delivered locally in `project files/apk/`.
+- Language: English prompts/replies.
 
 ## 2. Folder layout
 ```
@@ -22,122 +24,155 @@
 ├── .gitignore
 ├── README.md
 ├── project details/
-│   ├── CHANGE_HISTORY.md      ← prompts verbatim + changes
+│   ├── CHANGE_HISTORY.md      ← all prompts verbatim + changes (Session 8 = v2.1.0)
+│   ├── DEBUG_DUMP.md          ← deep v1.5 debug notes (still useful)
+│   ├── icon/                  ← icon sources (art.svg/bg.svg/gen.sh)
 │   └── SESSION_MEMORY.md      ← THIS FILE
 └── project files/
-    ├── apk/                    ← DELIVERABLES (v1.0, v1.1 …)
-    └── downloadchan/           ← the app source (@WORKING dir)
-        ├── VERSION             currently 1.2 (next build)
+    ├── apk/                   ← DELIVERABLES (latest = v2.1.0)
+    └── downloadchan/          ← app source (@WORKING dir)
+        ├── VERSION            currently 2.1.1 (next build)
         ├── env.sh · build-apk.sh
-        ├── www/                ← the UI to edit
-        └── android/            ← Capacitor Android + native plugin
+        ├── www/               ← UI
+        └── android/           ← Capacitor Android + native plugin
 ```
-Build working dir: `~/Downloads/download-chan/"project files"/downloadchan`.
+Build dir: `~/Downloads/download-chan/"project files"/downloadchan` (quote the space).
 
 ## 3. Build workflow (mandatory)
 ```bash
 cd ~/Downloads/download-chan/"project files"/downloadchan
 source env.sh        # JDK 17 + ANDROID_HOME=~/Android/Sdk
-./build-apk.sh       # VERSION -> inject versionCode/Name -> cap sync -> gradlew
+./build-apk.sh       # VERSION -> versionCode/Name -> cap sync -> gradlew
                      #   assembleDebug -> copy APK -> bump VERSION
 ```
 - Output: `project files/apk/Download-Chan-v<ver>.apk`.
 - **JDK 17 required** (system default is newer → Gradle 8.2 fails).
-- First build is slow (downloads yt-dlp/python/ffmpeg natives); incremental ~11–60s.
-- ABI filters = `arm64-v8a`, `armeabi-v7a` (set in `android/app/build.gradle`).
+- Incremental build ~11–30 s. ABI filters: arm64-v8a + armeabi-v7a.
+- `build-apk.sh 2.1.0` builds v2.1.0 (versionCode 20100) and sets VERSION to 2.1.1.
 
-## 4. App architecture
+## 4. Current v2.1 architecture
 ### Web layer (`www/`)
-- `index.html` — 4-tab shell (Download / Library / Browse / Settings).
-- `css/style.css` — dark theme, pink/cyan, bottom tab bar, safe-area aware.
-- `js/native.js` — `window.DC` wrapper over the Capacitor `Downloader` plugin.
-- `js/app.js` — all UI logic: tabs, settings (localStorage `dc_settings`),
-  download queue (one at a time), progress rendering, library list, sites,
-  share handling. Auto-starts a download when a link is shared.
+- `index.html` — 3 tabs: **Home / Files / Settings**. Neutral dark UI, indigo accent.
+- `css/style.css` — clean compact design, full-width bottom nav, switches, stepper.
+- Progressive disclosure:
+  - job summaries show state/progress; expandable Details hold Link/Type/Quality/
+    Connections/Save to/Size/Status (+ full error and Copy error on failures);
+  - file rows expand to Path/Type/Size/Saved + Share/Delete;
+  - Settings keeps Advanced fallback/resolver collapsed.
+- Only the active job card has a Cancel button (no duplicate header action).
+- `js/native.js` — `window.DC` wrappers:
+  `getClipboard`, `downloadAuto`, `storageStatus`, `requestStorage`, `openFolder`,
+  `cookiesStatus`, `pickCookies`, `clearCookies`, old file/engine methods.
+- `js/app.js` — UI logic:
+  - clipboard read on boot + **every resume**; auto-download if setting ON and URL not
+    auto-downloaded in the last **24 h** (`dc_last_auto_url` / `dc_last_auto_at`).
+  - share + http/https VIEW links → `handleShared` → starts immediately.
+  - queue is sequential (one active yt-dlp/direct job at a time), progress + speed + ETA.
+  - Settings persisted in `localStorage` key `dc_settings`
+    (`mode, quality, threads, autoClipboard, onlineFallback, resolver`).
+  - first-run storage sheet; banner while saving private.
+  - cookies import/remove; engine auto-update (max once/24 h) + manual button.
+  - errors stay as a "Last download" card with Retry / Dismiss / Copy details.
 
 ### Native layer (`android/app/src/main/java/com/downloadchan/app/`)
-- `MainActivity.java` — registers `DownloaderPlugin`; receives `ACTION_SEND`
-  (text/plain) + `ACTION_VIEW`, extracts the URL, calls `setPendingShare` and
-  `emitShareToJs`.
-- `DownloaderPlugin.java` — `@CapacitorPlugin(name="Downloader")`. Uses
-  `YoutubeDL.getInstance().init(ctx)` and `execute(request, processId, Function3)`.
-  - Progress callback type from Java: `kotlin.jvm.functions.Function3<Float,Long,String,Unit>`.
-  - Output dir: `getExternalFilesDir(DIRECTORY_DOWNLOADS)/Download-Chan`.
-  - Output template: `%(title).100s [%(id)s].%(ext)s`.
-  - Formats: video `bv*+ba/b` (+ `--merge-output-format mp4`), audio
-    `bestaudio/best -x --audio-format mp3`.
-  - Returns the newest file in the dir as the result.
-- Manifest: `INTERNET`, `ACCESS_NETWORK_STATE`; `largeHeap=true`;
-  **`extractNativeLibs="true"`** (REQUIRED by youtubedl-android — see gotchas);
-  share intent-filter; FileProvider `${applicationId}.fileprovider`.
-- `build.gradle`: `ndk { abiFilters 'arm64-v8a','armeabi-v7a' }` and
-  `packagingOptions { jniLibs { useLegacyPackaging = true } }` (both required).
-- `res/values/colors.xml` added (was missing in the KanaPet template).
-- **Icons:** cuter chibi green-haired girl (twin tails, hair flower, big sparkly
-  eyes) authored as SVG then rasterized with `rsvg-convert` + ImageMagick into
-  every mipmap density (square + round + adaptive foreground). Adaptive background
-  is a gradient VectorDrawable. Source art is versioned at
-  `project details/icon/{art.svg,bg.svg,gen.sh}` — regenerate with
-  `cd "project details/icon" && bash gen.sh`.
-- **Splashes:** gradient + centered logo (all `drawable*/splash.png`).
+- `MainActivity.java` — registers plugin; handles `ACTION_SEND`, `ACTION_VIEW`,
+  ClipData fallback; `setPendingShare` + live `sharedUrl` event.
+- `DownloaderPlugin.java` — `@CapacitorPlugin(name="Downloader")`:
+  - **Folders:** public `Environment.getExternalStoragePublicDirectory(DOWNLOADS)/Download Chan`
+    when `Environment.isExternalStorageManager()` (All files access) is true; else
+    `getExternalFilesDir(DOWNLOADS)/Download Chan`. Also scans old private `Download-Chan`.
+  - **Engine route (`downloadAuto`):** known social hosts (YouTube/IG/FB/TikTok/etc.) →
+    yt-dlp. Other URLs are probed (`Range: bytes=0-0`): direct media → native multi-thread.
+    Direct attempts fall back to yt-dlp on failure; yt-dlp failures append hints.
+  - **Direct engine:** probe size/content-type/range; split into 1–16 chunks, each thread
+    writes its byte range into a `.part` RandomAccessFile; progress/bytes/speed events;
+    Range unsupported → single stream; unique filenames; public/private folder support.
+  - **yt-dlp:** unique `.job_<id>/` output dir, then moves the produced file to the real
+    folder (prevents picking an old file). Adds
+    `--concurrent-fragments <threads>`, cookies, mp4/m4a preference, retry with
+    `--force-ipv4` + `android,default` client.
+  - **FFmpeg:** `ensureInit()` calls `YoutubeDL.init()` then `FFmpeg.getInstance().init()`
+    (REQUIRED for merging split video+audio and for MP3 extraction). v2.0.1 fixed this.
+  - **Cookies:** `pickCookies` uses SAF (`ACTION_OPEN_DOCUMENT` via `@ActivityCallback`),
+    copies ≤8 MB to `filesDir/cookies.txt`; `addCookies()` passes `--cookies`.
+  - **Storage:** `storageStatus`, `requestStorage` (opens All-files-access settings),
+    `openFolder` (DocumentsUI).
+  - **Clipboard:** `getClipboard` reads `ClipboardManager` on the UI thread.
+  - Lists/deletes/opens/shares files from public + private + legacy roots.
+- Manifest: `INTERNET`, `ACCESS_NETWORK_STATE`, **`MANAGE_EXTERNAL_STORAGE`**;
+  `extractNativeLibs="true"`; SEND text/plain + VIEW http/https; FileProvider.
+- `build.gradle`: ABI filters + `packagingOptions { jniLibs { useLegacyPackaging = true } }`
+  (both required by youtubedl-android).
 
 ## 5. Deliverables
 | Version | What | Size |
 |---|---|---|
-| v1.0 | Initial app (all 4 ABIs) — broken init | 214 MB |
-| v1.1 | + ABI filter — broken init | 109 MB |
-| v1.2 | Fix init (extractNativeLibs), green-hair icon + splash | 108 MB |
-| v1.3 | YouTube 403 hardening + retry, mp4/m4a prefer, persistent error box, cuter chibi icon | 108 MB |
-| v1.4 | Online resolver fallback (Auto: local yt-dlp → gendownload.com), Settings toggle | 108 MB |
-| v1.5 | **yt-dlp engine auto-update (boot + Settings button), login-wall error hint** ← LATEST | 108 MB |
+| v1.0 | Initial app (all ABIs) — broken init | 214 MB |
+| v1.1 | ABI filter — broken init | 109 MB |
+| v1.2 | Fix init, green-hair chibi icon/splash | 108 MB |
+| v1.3 | YouTube 403 hardening, persistent error box | 108 MB |
+| v1.4 | Online resolver fallback (gendownload) | 108 MB |
+| v1.5 | yt-dlp engine auto-update, login-wall hint | 108 MB |
+| v2.0 | From-scratch rebuild: clipboard auto-start, public `Downloads/Download Chan`, multi-thread direct engine, cookies import, modern 3-tab UI | 104 MB |
+| v2.0.1 | Facebook/social audio fix — bundled FFmpeg is initialized, so yt-dlp merges video+audio | 104 MB |
+| v2.1.0 | **Clean UI refresh + progressive Details levels; audio fix retained** ← LATEST | 104 MB |
 
-Debug-signed (debug keystore). Install via `adb install -r <apk>`.
-(v1.0/v1.1/v1.2 removed — superseded.)
+- v2.1.0 APK: `project files/apk/Download-Chan-v2.1.0.apk` ← INSTALL THIS
+  - bytes `108077112`; SHA-256 `e2352d1d65b20b84e5964c52e6f4f7eabbe07bb1f43e4d4f967c7483378dc369`.
+  - Debug-signed (same debug keystore) → installs over v2.0.1/v2.0/v1.5, data preserved.
+  - Device-confirmed working by user on 2026-10-28; UI also checked in headless
+    Chromium at 390×844 and 360×800.
+- v2.0.1 APK kept at `project files/apk/Download-Chan-v2.0.1.apk` (previous audio fix).
+- v2.0 APK kept at `project files/apk/Download-Chan-v2.0.apk` (no-audio bug for split
+  audio/video sites).
 
-## 6. Gotchas
-- **Facebook login-wall (v1.5):** FB `watch/?v=` videos usually need an authenticated
-  session. Bundled yt-dlp (2025.11.12) AND latest (2026.08.19) both give
-  `[facebook] ...: Cannot parse data`; gendownload returns **422**. Real fix =
-  **cookies/login** (not implemented). Engine auto-update added anyway (bundle was ~10mo
-  stale): `updateEngine` → `YoutubeDL.UpdateChannel.STABLE.INSTANCE`.
-- **Online fallback (v1.4):** `DownloaderPlugin.downloadRemote()` POSTs `{url}` to
-  `settings.resolver + /api/extract` (default `https://gendownload.com`), which
-  returns `{title, formats:[{label,type,ext,url}]}`; the app downloads
-  `formats[i].url` directly. Generic/pluggable, but the JSON schema is
-  gendownload-specific — a **cobalt** backend needs a different adapter (cobalt
-  returns `status: tunnel|redirect|picker`, not `formats[]`). Test a resolver with:
-  `curl -sX POST <res>/api/extract -H 'Content-Type: application/json' -d '{"url":"<video>"}'`.
-- **"failed to initialize" = native libs not extracted.** youtubedl-android reads
-  its `.so` from `nativeLibraryDir`; AGP 8 defaults `extractNativeLibs=false`.
-  Keep BOTH `android:extractNativeLibs="true"` in the manifest AND
-  `packagingOptions { jniLibs { useLegacyPackaging = true } }` in build.gradle.
-- **YouTube "fails after a while" = media-download 403 (anti-bot/PO token), NOT an
-  outdated extractor.** Bundled yt-dlp is current. Extraction succeeds, then the
-  stream URL is rejected. Mitigations in-app: `player_client=default`, prefer
-  mp4/m4a, retry with `--force-ipv4` + `android` client. Hard IP flags need
-  cookies/VPN. Reproduce locally with the bundled binary
-  (`python3 <unzipped res/raw/ytdlp> ...`) — it runs on the host too.
-- Different YouTube `player_client` values are NOT equivalent: `default`/`android`
-  give downloadable URLs; `android_vr`/`tv`/`web_safari`/`mweb`/`ios` 403 or have no
-  formats. Don't set `player_client` blind.
-- `git clone github.com` / `git ls-remote` HANG on this machine (use raw /
-  codeload). `git push` may be slow — allow a long timeout.
-- GitHub token in keyring was **invalid** (needs `gh auth login` before push).
-- Paths have a space (`project files`) — always quote.
-- fuzzy: the KanaPet template had no `colors.xml` yet built; we added one.
-- Native plugin is registered manually (`registerPlugin(DownloaderPlugin.class)`)
-  because it lives in the app module, not as an npm package.
+## 6. Gotchas / decisions
+- **All files access:** public Downloads requires the sideload-only
+  `MANAGE_EXTERNAL_STORAGE` + user toggle (Settings → Apps → Special access → All files
+  access → Download Chan). Without it, the app silently uses the private folder and the
+  UI shows a banner. Play Store would reject this permission (we are sideload-only).
+- **Clipboard:** Android 10+ only returns clipboard while the app has focus; the bridge
+  reads on launch/resume. Auto-download dedupes the same URL for 24 h. Manual Download
+  always works; Settings has an off switch.
+- **Private FB/IG:** public posts may work via yt-dlp + engine update; login-walled ones
+  need **cookies.txt** (Settings → Import). Gendownload resolver returned 422 on the old
+  FB issue, so it is not a reliable fix (now Advanced + OFF by default).
+- **Multi-thread:** only direct HTTP(S) files with server Range support. HLS/DASH/social
+  links use yt-dlp fragments (`--concurrent-fragments`). Servers that ignore Range fall
+  back to one connection.
+- **"failed to initialize"** = youtubedl-android native libs not extracted. Keep
+  `android:extractNativeLibs="true"` AND `useLegacyPackaging = true`.
+- **YouTube 403 after extraction** = anti-bot/PO-token; mitigations: mp4/m4a selectors,
+  `player_client=default`, retry `--force-ipv4` + `android,default`. Cookies/VPN may be
+  needed. Don't set `player_client` blindly.
+- **No audio in a video:** the bundled FFmpeg was not initialized in v2.0/v1.5, so yt-dlp
+  could not merge separate video+audio streams and saved the video-only file. v2.0.1
+  initializes FFmpeg; re-download old no-audio files. If a future build removes this call,
+  the bug returns for Facebook Reels, YouTube, TikTok, etc.
+- **First use delay:** FFmpeg extraction (~78 MB of libs) happens on first engine init in
+  the new version; a few seconds is normal, then it is cached in `noBackupFilesDir`.
+- **Old files:** v1.5 saved in app-private `Download-Chan`; v2.0 lists that legacy folder
+  too. New downloads go to `Download Chan` (space) in public/private.
+- **Public file sharing:** FileProvider has `external-path` root + `external-files-path`,
+  so public and private files both open/share.
+- **UI testing:** no adb device/emulator. Headless preview uses a temporary copy at
+  `/tmp/opencode/dcprev` with `window.__dcPreview`; never add those hooks to `www/`.
+  Screenshot drivers live in `/tmp/opencode/`. Native bars are `#0A0B0F` in `styles.xml`.
+- **JDK 17**; quote `project files`; `git clone/ls-remote` hangs on this host (use
+  codeload/raw); `git push` slow. GitHub token in keyring was invalid previously.
+- Native plugin is registered manually (no npm package).
+- **See `DEBUG_DUMP.md`** for v1.5 experiments/repro commands.
+- `CHANGE_HISTORY.md` Sessions 6–8 have the verbatim prompts + full change lists.
 
 ## 7. Typical next moves
-- Confirm v1.5 on the device: engine auto-updates on first launch (watch Settings →
-  Engine), and Online fallback catches YouTube 403s.
-- **Cookies support** is the highest-value next feature: import a `cookies.txt` (SAF) or
-  in-app WebView login → pass `--cookies` to yt-dlp. Fixes login-walled FB/IG.
-- If the free resolver is unreliable/rate-limited, swap `settings.resolver` to a
-  self-hosted **cobalt** instance (needs a small adapter for cobalt's schema).
-- Smaller release APK (keystore + `assembleRelease`, `minifyEnabled`), or arm64-only.
-- Download thumbnail/title preview (`getInfo` already implemented, UI not wired).
-- Multiple concurrent downloads / background service + notification.
-- Custom cookies support for Instagram/Facebook gated posts.
-- In-app WebView "Browse" tab instead of launching the system browser.
-- iOS target.
+1. **Device test v2.1.0** (priority): install over v2.0.1; grant All files access;
+   verify `Downloads/Download Chan`, clipboard auto-start, share sheet, VIEW link,
+   direct MP4 (multi-thread speed), YouTube, audio MP3, cancel/queue, and the new
+   collapsed/expanded Details on jobs and files.
+2. Fix anything that fails; likely areas: Android 11 clipboard access timing,
+   All-files-access UX, OEM DocumentsUI, direct-range servers, YouTube 403.
+3. Test cookies.txt with a login-walled FB/IG link and update the error hints.
+4. Optional: background service + notification, resume support, thumbnail preview,
+   arm64-only smaller APK, release keystore, GitHub push/release (only if asked).
+5. After device feedback, polish spacing/labels if needed and update
+   `PROJECT_DATA.txt` / AGENTS with the next build.
