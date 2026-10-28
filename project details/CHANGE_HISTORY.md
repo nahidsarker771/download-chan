@@ -441,3 +441,13 @@ ERROR: [facebook] 1413081230459468: Cannot parse data; please report this issue 
   https://github.com/nahid77777771-maker/download-chan/releases/latest/download/Download-Chan.apk
 - Updated docs to state that the APK is debug-signed, installs over v2.1.0 with data
   preserved, and is not a Play Store/release-keystore build.
+
+### Post-release blocker (unresolved)
+- Immediately after the release was created and verified, GitHub suspended the
+  `nahid77777771-maker` account. `gh api user` returns 403 "Sorry. Your account was
+  suspended"; public repo, Pages and release URLs return 404; the gh keyring token is
+  now invalid.
+- The push and release did complete first (`main` at `0fe438b`, release asset digest
+  matched), but none of the GitHub URLs are usable until the account is restored.
+- Local source, commits, APK and release notes are intact. Appeal/restore the GitHub
+  account, then re-authenticate gh and verify the release remains.

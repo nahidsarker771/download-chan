@@ -1,7 +1,7 @@
 # Download Chan — Session Memory (resume playbook)
 > Read this FIRST in any new session. Update at the END of every session.
 
-**Last dump:** Session 11 · v2.1.1 (pushed + released)
+**Last dump:** Session 11 · v2.1.1 (pushed + released, then GitHub account suspended)
 **Next build will be:** v2.1.2 (`VERSION` currently 2.1.2)
 
 ---
@@ -14,9 +14,12 @@
   - New native segmented HTTP engine for direct files (ADM/1DM-style multi-thread).
 - **Package:** `com.downloadchan.app` (unchanged, so v2.1.1 installs over older builds).
 - **App name:** `Download Chan` (space). **Version:** 2.1.1 (versionCode 20101).
-- **Repo:** https://github.com/nahid77777771-maker/download-chan (main; v2.1.1 pushed
-  2026-10-28 at `9b5a50c`). APKs are gitignored locally but v2.1.1 is attached to the
-  GitHub release as `Download-Chan.apk`:
+- **Repo:** https://github.com/nahid77777771-maker/download-chan (main; v2.1.1 code
+  commit `9b5a50c`, docs `0fe438b`). **GitHub account `nahid77777771-maker` was
+  suspended immediately after publishing; repo, Pages and release URLs now return 404
+  and the API returns 403.** Local commits/APK remain intact. Account restoration via
+  GitHub Support is required; do not assume GitHub links work until confirmed.
+- Release (once account is restored):
   https://github.com/nahid77777771-maker/download-chan/releases/tag/v2.1.1
 - Language: English prompts/replies.
 
@@ -122,7 +125,7 @@ source env.sh        # JDK 17 + ANDROID_HOME=~/Android/Sdk
 
 - v2.1.1 APK: `project files/apk/Download-Chan-v2.1.1.apk` ← INSTALL THIS
   - GitHub release v2.1.1: https://github.com/nahid77777771-maker/download-chan/releases/tag/v2.1.1
-    (stable asset `Download-Chan.apk`; latest: `/releases/latest/download/Download-Chan.apk`).
+    (stable asset `Download-Chan.apk`; currently 404 due account suspension).
   - bytes `109138901`; SHA-256 `a897c628c627fb117e2ae7267f9224f9054e8b5a5381701eab388a91e622eebf`.
   - Debug-signed (same debug keystore) → installs over v2.1.0/v2.0.1/v2.0/v1.5,
     data preserved. No Android release keystore exists yet.
