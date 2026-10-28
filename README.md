@@ -7,6 +7,11 @@ Supports YouTube, Instagram, Facebook, TikTok, Douyin, X/Twitter, Vimeo, Reddit
 and direct files (MP4, MKV, MP3, ZIP, APK, PDF...). Video downloads as MP4, audio
 can be extracted as MP3.
 
+## Download
+
+[Latest APK](https://github.com/nahid77777771-maker/download-chan/releases/latest/download/Download-Chan.apk)
+— v2.1.1, debug-signed sideload build. Installs over older builds with data preserved.
+
 ## Features
 
 - **Clipboard auto-download** — a copied link is detected on launch/resume and starts

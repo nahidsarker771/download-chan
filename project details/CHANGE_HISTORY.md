@@ -413,3 +413,31 @@ ERROR: [facebook] 1413081230459468: Cannot parse data; please report this issue 
 - Install v2.1.1 over v2.1.0; downloads, cookies, storage and the audio fix are unchanged.
   If the launcher still shows the old icon, restart the launcher or re-add the shortcut.
   APK: `project files/apk/Download-Chan-v2.1.1.apk`.
+
+---
+
+## Session 11 — publish v2.1.1 + create the missing release APK
+
+### Prompts (verbatim)
+> after finishing logo update git repo of download chan i can t find y=the relse apk build see and solve the issu shy is that
+> if issu resolved turn off pc
+
+### Root cause
+- `project files/apk/*.apk` is deliberately gitignored, so the APK was never in the repo.
+- No GitHub release had been created for Download Chan; the repo only had source
+  (v2.1.0 at `73b0d84`).
+- The build script produces a debug-signed APK, not a Gradle release variant; no Android
+  release keystore exists for this project yet.
+
+### Fix
+- Committed and pushed the v2.1.1 logo source/docs to `main`:
+  `9b5a50c v2.1.1: chubby cat mascot logo + splash`.
+- Created GitHub release **v2.1.1** with the stable asset name `Download-Chan.apk`:
+  https://github.com/nahid77777771-maker/download-chan/releases/tag/v2.1.1
+- Verified the release asset: 109,138,901 bytes; GitHub digest
+  `sha256:a897c628c627fb117e2ae7267f9224f9054e8b5a5381701eab388a91e622eebf`
+  (matches the local APK).
+- Added the stable latest-download link to `README.md`:
+  https://github.com/nahid77777771-maker/download-chan/releases/latest/download/Download-Chan.apk
+- Updated docs to state that the APK is debug-signed, installs over v2.1.0 with data
+  preserved, and is not a Play Store/release-keystore build.

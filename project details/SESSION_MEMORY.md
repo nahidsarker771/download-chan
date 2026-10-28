@@ -1,7 +1,7 @@
 # Download Chan — Session Memory (resume playbook)
 > Read this FIRST in any new session. Update at the END of every session.
 
-**Last dump:** Session 10 · v2.1.1 (chubby cat logo, build ready)
+**Last dump:** Session 11 · v2.1.1 (pushed + released)
 **Next build will be:** v2.1.2 (`VERSION` currently 2.1.2)
 
 ---
@@ -14,9 +14,10 @@
   - New native segmented HTTP engine for direct files (ADM/1DM-style multi-thread).
 - **Package:** `com.downloadchan.app` (unchanged, so v2.1.1 installs over older builds).
 - **App name:** `Download Chan` (space). **Version:** 2.1.1 (versionCode 20101).
-- **Repo:** https://github.com/nahid77777771-maker/download-chan (main; v2.1.0 source
-  pushed 2026-10-28; v2.1.1 logo work is local/unpushed). APKs are gitignored and
-  delivered locally in `project files/apk/`.
+- **Repo:** https://github.com/nahid77777771-maker/download-chan (main; v2.1.1 pushed
+  2026-10-28 at `9b5a50c`). APKs are gitignored locally but v2.1.1 is attached to the
+  GitHub release as `Download-Chan.apk`:
+  https://github.com/nahid77777771-maker/download-chan/releases/tag/v2.1.1
 - Language: English prompts/replies.
 
 ## 2. Folder layout
@@ -120,9 +121,11 @@ source env.sh        # JDK 17 + ANDROID_HOME=~/Android/Sdk
 | v2.1.1 | **Chubby cat mascot logo + new splash/header mark; no anime/human** ← LATEST | 104 MB |
 
 - v2.1.1 APK: `project files/apk/Download-Chan-v2.1.1.apk` ← INSTALL THIS
+  - GitHub release v2.1.1: https://github.com/nahid77777771-maker/download-chan/releases/tag/v2.1.1
+    (stable asset `Download-Chan.apk`; latest: `/releases/latest/download/Download-Chan.apk`).
   - bytes `109138901`; SHA-256 `a897c628c627fb117e2ae7267f9224f9054e8b5a5381701eab388a91e622eebf`.
   - Debug-signed (same debug keystore) → installs over v2.1.0/v2.0.1/v2.0/v1.5,
-    data preserved.
+    data preserved. No Android release keystore exists yet.
   - Logo/header checked in headless Chromium at 360×800; not device-tested yet.
 - v2.1.0 APK kept at `project files/apk/Download-Chan-v2.1.0.apk` (UI refresh; user-confirmed).
 - v2.0.1 APK kept at `project files/apk/Download-Chan-v2.0.1.apk` (previous audio fix).
@@ -170,11 +173,11 @@ source env.sh        # JDK 17 + ANDROID_HOME=~/Android/Sdk
   codeload/raw); `git push` slow. GitHub token in keyring was invalid previously.
 - Native plugin is registered manually (no npm package).
 - **See `DEBUG_DUMP.md`** for v1.5 experiments/repro commands.
-- `CHANGE_HISTORY.md` Sessions 6–10 have the verbatim prompts + full change lists.
+- `CHANGE_HISTORY.md` Sessions 6–11 have the verbatim prompts + full change lists.
 
 ## 7. Typical next moves
-1. **Install v2.1.1** over v2.1.0 and confirm the new chubby-cat launcher icon,
-   header mark, and splash. If the launcher caches the old icon, restart it.
+1. **Install the v2.1.1 release** over v2.1.0 and confirm the new chubby-cat launcher
+   icon, header mark, and splash. If the launcher caches the old icon, restart it.
 2. Fix anything reported; likely areas: Android 11 clipboard timing, All-files-access
    UX, OEM DocumentsUI, direct-range servers, YouTube 403.
 3. Test cookies.txt with a login-walled FB/IG link and update the error hints.
