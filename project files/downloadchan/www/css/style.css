@@ -91,15 +91,18 @@ svg { display: block; }
   width: 36px;
   height: 36px;
   border-radius: 11px;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  background: linear-gradient(140deg, #8b80ff, #6c5df5);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  overflow: hidden;
+  background: #14152a;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   flex: 0 0 auto;
 }
 
-.logo svg { width: 19px; height: 19px; }
+.logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 .brand-copy { min-width: 0; }
 

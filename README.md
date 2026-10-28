@@ -42,6 +42,7 @@ project files/downloadchan/
 ├── www/                    ← web UI
 │   ├── index.html
 │   ├── css/style.css
+│   ├── img/logo.png        (generated header mascot)
 │   └── js/{app,native}.js
 ├── android/                ← Capacitor Android + native plugin
 │   └── app/src/main/java/com/downloadchan/app/

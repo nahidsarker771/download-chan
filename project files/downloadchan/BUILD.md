@@ -51,7 +51,7 @@ cd android && ./gradlew assembleDebug
 cd downloadchan
 source env.sh
 ./build-apk.sh          # builds VERSION, names APK Download-Chan-v<ver>.apk, bumps VERSION
-./build-apk.sh 2.1.0    # optional: force a specific version
+./build-apk.sh 2.1.1    # optional: force a specific version
 ```
 It: (1) reads `VERSION`, (2) writes `versionName`/`versionCode` into
 `android/app/build.gradle`, (3) runs `npx cap sync android` + `./gradlew assembleDebug`,
@@ -79,8 +79,10 @@ youtubedl-android loads its bundled Python/FFmpeg `.so` files from
 
 ## Icons / splash
 Icon art is authored as SVG in `../../project details/icon/` and rasterized into all
-mipmap densities with `bash gen.sh` (needs `rsvg-convert` + ImageMagick). Splash
-screens are gradient + centered logo under `res/drawable*/splash.png`.
+mipmap densities with `bash gen.sh` (needs `rsvg-convert` + ImageMagick). The mascot is
+a chubby peach cat holding a download card — keep it non-human and non-anime. The same
+script also writes the header mark to `www/img/logo.png` and regenerates every
+`res/drawable*/splash.png` (indigo gradient + floating mascot + wordmark).
 
 ## Notes
 - Only download content you own or have rights to save. Respect each site's terms.

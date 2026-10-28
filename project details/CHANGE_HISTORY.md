@@ -375,3 +375,41 @@ ERROR: [facebook] 1413081230459468: Cannot parse data; please report this issue 
   https://github.com/nahid77777771-maker/download-chan.
 - APK files remain gitignored; the v2.1.0 build is unchanged at
   `project files/apk/Download-Chan-v2.1.0.apk`.
+
+---
+
+## Session 10 — v2.1.1: chubby cat logo (no anime/human)
+
+### Prompt (verbatim)
+> change the logo for download chan use a cute choby type logo no anime or human
+
+### Interpretation
+- Treated "choby" as chubby/chibi-cute.
+- Replaced the green-haired anime girl with a round, chubby peach cat mascot holding a
+  white download card. No human features, no anime styling.
+
+### What changed
+- New SVG masters `project details/icon/art.svg` + `bg.svg`:
+  chubby cat, big simple eyes, blush, curled tail, white download card with indigo arrow,
+  deep indigo gradient background and soft glow.
+- Regenerated every launcher icon density (`ic_launcher`, `ic_launcher_round`,
+  `ic_launcher_foreground`) and updated the adaptive background gradient.
+- Replaced all `res/drawable*/splash.png` screens with an indigo gradient, floating cat,
+  "Download Chan" wordmark and "save anything" tagline.
+- Added `www/img/logo.png` and replaced the old header arrow badge with the new mascot.
+- Updated the in-app version display to `2.1.1` in both `index.html` and `app.js`.
+- `gen.sh` now regenerates icons, the web header logo, and all splash sizes reproducibly.
+
+### Verification
+- `node --check` passes; headless Chromium at 360×800 shows the new header logo with no
+  JS errors and no horizontal overflow.
+- Built v2.1.1 (versionCode 20101), 109,138,901 bytes, SHA-256
+  `a897c628c627fb117e2ae7267f9224f9054e8b5a5381701eab388a91e622eebf`.
+- `aapt` confirms versionName 2.1.1 / code 20101 and label `Download Chan`; APK contains
+  the new launcher PNGs, all splash PNGs, and `assets/public/img/logo.png`.
+- Not device-tested (no adb device/emulator attached).
+
+### User-facing
+- Install v2.1.1 over v2.1.0; downloads, cookies, storage and the audio fix are unchanged.
+  If the launcher still shows the old icon, restart the launcher or re-add the shortcut.
+  APK: `project files/apk/Download-Chan-v2.1.1.apk`.

@@ -1,8 +1,8 @@
 # Download Chan — Session Memory (resume playbook)
 > Read this FIRST in any new session. Update at the END of every session.
 
-**Last dump:** Session 9 · v2.1.0 (UI confirmed, source pushed)
-**Next build will be:** v2.1.1 (`VERSION` already 2.1.1)
+**Last dump:** Session 10 · v2.1.1 (chubby cat logo, build ready)
+**Next build will be:** v2.1.2 (`VERSION` currently 2.1.2)
 
 ---
 
@@ -12,10 +12,11 @@
 - **Stack:** Capacitor 6 (vanilla HTML/CSS/JS in `www/`) + native Java bridge.
   - yt-dlp bundled for social/video sites (`youtubedl-android 0.18.1` + ffmpeg).
   - New native segmented HTTP engine for direct files (ADM/1DM-style multi-thread).
-- **Package:** `com.downloadchan.app` (unchanged, so v2.1.0 installs over older builds).
-- **App name:** `Download Chan` (space). **Version:** 2.1.0 (versionCode 20100).
+- **Package:** `com.downloadchan.app` (unchanged, so v2.1.1 installs over older builds).
+- **App name:** `Download Chan` (space). **Version:** 2.1.1 (versionCode 20101).
 - **Repo:** https://github.com/nahid77777771-maker/download-chan (main; v2.1.0 source
-  pushed 2026-10-28). APKs are gitignored and delivered locally in `project files/apk/`.
+  pushed 2026-10-28; v2.1.1 logo work is local/unpushed). APKs are gitignored and
+  delivered locally in `project files/apk/`.
 - Language: English prompts/replies.
 
 ## 2. Folder layout
@@ -24,14 +25,14 @@
 ├── .gitignore
 ├── README.md
 ├── project details/
-│   ├── CHANGE_HISTORY.md      ← all prompts verbatim + changes (Session 8 = v2.1.0)
+│   ├── CHANGE_HISTORY.md      ← all prompts verbatim + changes (Session 10 = v2.1.1)
 │   ├── DEBUG_DUMP.md          ← deep v1.5 debug notes (still useful)
-│   ├── icon/                  ← icon sources (art.svg/bg.svg/gen.sh)
+│   ├── icon/                  ← chubby cat SVG masters + gen.sh (icons/web/splash)
 │   └── SESSION_MEMORY.md      ← THIS FILE
 └── project files/
-    ├── apk/                   ← DELIVERABLES (latest = v2.1.0)
+    ├── apk/                   ← DELIVERABLES (latest = v2.1.1)
     └── downloadchan/          ← app source (@WORKING dir)
-        ├── VERSION            currently 2.1.1 (next build)
+        ├── VERSION            currently 2.1.2 (next build)
         ├── env.sh · build-apk.sh
         ├── www/               ← UI
         └── android/           ← Capacitor Android + native plugin
@@ -48,7 +49,7 @@ source env.sh        # JDK 17 + ANDROID_HOME=~/Android/Sdk
 - Output: `project files/apk/Download-Chan-v<ver>.apk`.
 - **JDK 17 required** (system default is newer → Gradle 8.2 fails).
 - Incremental build ~11–30 s. ABI filters: arm64-v8a + armeabi-v7a.
-- `build-apk.sh 2.1.0` builds v2.1.0 (versionCode 20100) and sets VERSION to 2.1.1.
+- `build-apk.sh 2.1.1` builds v2.1.1 (versionCode 20101) and sets VERSION to 2.1.2.
 
 ## 4. Current v2.1 architecture
 ### Web layer (`www/`)
@@ -115,13 +116,15 @@ source env.sh        # JDK 17 + ANDROID_HOME=~/Android/Sdk
 | v1.5 | yt-dlp engine auto-update, login-wall hint | 108 MB |
 | v2.0 | From-scratch rebuild: clipboard auto-start, public `Downloads/Download Chan`, multi-thread direct engine, cookies import, modern 3-tab UI | 104 MB |
 | v2.0.1 | Facebook/social audio fix — bundled FFmpeg is initialized, so yt-dlp merges video+audio | 104 MB |
-| v2.1.0 | **Clean UI refresh + progressive Details levels; audio fix retained** ← LATEST | 104 MB |
+| v2.1.0 | Clean UI refresh + progressive Details levels; audio fix retained | 104 MB |
+| v2.1.1 | **Chubby cat mascot logo + new splash/header mark; no anime/human** ← LATEST | 104 MB |
 
-- v2.1.0 APK: `project files/apk/Download-Chan-v2.1.0.apk` ← INSTALL THIS
-  - bytes `108077112`; SHA-256 `e2352d1d65b20b84e5964c52e6f4f7eabbe07bb1f43e4d4f967c7483378dc369`.
-  - Debug-signed (same debug keystore) → installs over v2.0.1/v2.0/v1.5, data preserved.
-  - Device-confirmed working by user on 2026-10-28; UI also checked in headless
-    Chromium at 390×844 and 360×800.
+- v2.1.1 APK: `project files/apk/Download-Chan-v2.1.1.apk` ← INSTALL THIS
+  - bytes `109138901`; SHA-256 `a897c628c627fb117e2ae7267f9224f9054e8b5a5381701eab388a91e622eebf`.
+  - Debug-signed (same debug keystore) → installs over v2.1.0/v2.0.1/v2.0/v1.5,
+    data preserved.
+  - Logo/header checked in headless Chromium at 360×800; not device-tested yet.
+- v2.1.0 APK kept at `project files/apk/Download-Chan-v2.1.0.apk` (UI refresh; user-confirmed).
 - v2.0.1 APK kept at `project files/apk/Download-Chan-v2.0.1.apk` (previous audio fix).
 - v2.0 APK kept at `project files/apk/Download-Chan-v2.0.apk` (no-audio bug for split
   audio/video sites).
@@ -158,21 +161,23 @@ source env.sh        # JDK 17 + ANDROID_HOME=~/Android/Sdk
 - **UI testing:** no adb device/emulator. Headless preview uses a temporary copy at
   `/tmp/opencode/dcprev` with `window.__dcPreview`; never add those hooks to `www/`.
   Screenshot drivers live in `/tmp/opencode/`. Native bars are `#0A0B0F` in `styles.xml`.
+- **Logo/splash:** source of truth is `project details/icon/{art.svg,bg.svg}`. Run
+  `bash project details/icon/gen.sh` to regenerate every mipmap, `www/img/logo.png`,
+  the adaptive background gradient, and all portrait/landscape splash sizes. Keep it a
+  cute non-human mascot (chubby cat), no anime/human art. The splash uses `art.png`
+  transparent; the header uses `square.png`.
 - **JDK 17**; quote `project files`; `git clone/ls-remote` hangs on this host (use
   codeload/raw); `git push` slow. GitHub token in keyring was invalid previously.
 - Native plugin is registered manually (no npm package).
 - **See `DEBUG_DUMP.md`** for v1.5 experiments/repro commands.
-- `CHANGE_HISTORY.md` Sessions 6–8 have the verbatim prompts + full change lists.
+- `CHANGE_HISTORY.md` Sessions 6–10 have the verbatim prompts + full change lists.
 
 ## 7. Typical next moves
-1. **Device test v2.1.0** (priority): install over v2.0.1; grant All files access;
-   verify `Downloads/Download Chan`, clipboard auto-start, share sheet, VIEW link,
-   direct MP4 (multi-thread speed), YouTube, audio MP3, cancel/queue, and the new
-   collapsed/expanded Details on jobs and files.
-2. Fix anything that fails; likely areas: Android 11 clipboard access timing,
-   All-files-access UX, OEM DocumentsUI, direct-range servers, YouTube 403.
+1. **Install v2.1.1** over v2.1.0 and confirm the new chubby-cat launcher icon,
+   header mark, and splash. If the launcher caches the old icon, restart it.
+2. Fix anything reported; likely areas: Android 11 clipboard timing, All-files-access
+   UX, OEM DocumentsUI, direct-range servers, YouTube 403.
 3. Test cookies.txt with a login-walled FB/IG link and update the error hints.
 4. Optional: background service + notification, resume support, thumbnail preview,
-   arm64-only smaller APK, release keystore, GitHub push/release (only if asked).
-5. After device feedback, polish spacing/labels if needed and update
-   `PROJECT_DATA.txt` / AGENTS with the next build.
+   arm64-only smaller APK, release keystore, GitHub release (only if asked).
+5. Next build is v2.1.2; update `PROJECT_DATA.txt` / AGENTS when it ships.

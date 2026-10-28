@@ -1,131 +1,103 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#8bef74"/>
-      <stop offset="0.55" stop-color="#63cf52"/>
-      <stop offset="1" stop-color="#49b53d"/>
+    <linearGradient id="fur" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#ffdfbf"/>
+      <stop offset="1" stop-color="#f4b98d"/>
     </linearGradient>
-    <linearGradient id="tail" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#74db60"/>
-      <stop offset="1" stop-color="#3fa534"/>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd6ac"/>
+      <stop offset="1" stop-color="#efa771"/>
     </linearGradient>
-    <linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffb6d4"/>
-      <stop offset="1" stop-color="#ff7fb4"/>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eeeaff"/>
     </linearGradient>
-    <radialGradient id="iris" cx="0.38" cy="0.34" r="0.75">
-      <stop offset="0" stop-color="#b6ffe0"/>
-      <stop offset="0.45" stop-color="#46c99a"/>
-      <stop offset="1" stop-color="#166a4f"/>
+    <linearGradient id="arrow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8277ff"/>
+      <stop offset="1" stop-color="#5a4dea"/>
+    </linearGradient>
+    <radialGradient id="blush" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ff8fac" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#ff8fac" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="cheek" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#ff8fb0" stop-opacity="0.85"/>
-      <stop offset="1" stop-color="#ff8fb0" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-    </radialGradient>
+    <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#160f35" flood-opacity="0.28"/>
+    </filter>
+    <filter id="pawShadow" x="-50%" y="-50%" width="200%" height="220%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#8b5539" flood-opacity="0.2"/>
+    </filter>
   </defs>
 
-  <!-- ===== soft glow behind head ===== -->
-  <circle cx="256" cy="240" r="212" fill="url(#glow)"/>
+  <!-- tail -->
+  <path d="M374 410 C430 430 458 398 444 364 C433 338 407 344 412 366"
+        fill="none" stroke="#f0aa78" stroke-width="30" stroke-linecap="round"/>
+  <path d="M412 366 C415 354 424 350 432 352"
+        fill="none" stroke="#ffd6ac" stroke-width="22" stroke-linecap="round"/>
 
-  <!-- ===== back hair ===== -->
-  <ellipse cx="256" cy="238" rx="176" ry="186" fill="#3fa534"/>
+  <!-- ears -->
+  <path d="M118 174 C102 128 106 92 132 89 C158 86 184 122 196 156 Z" fill="url(#fur)"/>
+  <path d="M394 174 C410 128 406 92 380 89 C354 86 328 122 316 156 Z" fill="url(#fur)"/>
+  <path d="M139 160 C129 132 132 111 144 109 C158 108 172 132 178 151 Z" fill="#ffb5a7"/>
+  <path d="M373 160 C383 132 380 111 368 109 C354 108 340 132 334 151 Z" fill="#ffb5a7"/>
 
-  <!-- ===== twin tails ===== -->
-  <ellipse cx="96" cy="300" rx="56" ry="150" fill="url(#tail)" transform="rotate(12 96 300)"/>
-  <ellipse cx="416" cy="300" rx="56" ry="150" fill="url(#tail)" transform="rotate(-12 416 300)"/>
-  <circle cx="96" cy="170" r="30" fill="#ff8fc0"/>
-  <circle cx="416" cy="170" r="30" fill="#ff8fc0"/>
-  <path d="M96 140 l7 18 18 7 -18 7 -7 18 -7 -18 -18 -7 18 -7 z" fill="#ffe36e"/>
-  <path d="M416 140 l7 18 18 7 -18 7 -7 18 -7 -18 -18 -7 18 -7 z" fill="#ffe36e"/>
+  <!-- chubby body -->
+  <ellipse cx="256" cy="390" rx="148" ry="116" fill="url(#body)"/>
+  <ellipse cx="256" cy="406" rx="98" ry="84" fill="#ffe6ca"/>
 
-  <!-- ===== small torso (chibi) ===== -->
-  <path d="M186 512 Q186 404 256 404 Q326 404 326 512 Z" fill="url(#shirt)"/>
-  <path d="M236 406 L256 432 L276 406 Z" fill="#ffffff"/>
+  <!-- head -->
+  <ellipse cx="256" cy="224" rx="150" ry="132" fill="url(#fur)"/>
 
-  <!-- ===== download sign (held in front) ===== -->
-  <rect x="176" y="416" width="160" height="92" rx="18" fill="#ffffff"/>
-  <rect x="249" y="434" width="14" height="28" rx="5" fill="#2fae7a"/>
-  <path d="M236 456 L276 456 L256 480 Z" fill="#2fae7a"/>
-  <path d="M230 486 L230 500 L282 500 L282 486" fill="none" stroke="#2fae7a" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- forehead stripes -->
+  <path d="M232 105 q7 12 0 23" fill="none" stroke="#efac7a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M256 100 q8 13 0 25" fill="none" stroke="#efac7a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M280 105 q7 12 0 23" fill="none" stroke="#efac7a" stroke-width="7" stroke-linecap="round"/>
 
-  <!-- ===== arms + hands ===== -->
-  <path d="M190 430 L212 468" fill="none" stroke="#ffe2d2" stroke-width="30" stroke-linecap="round"/>
-  <path d="M322 430 L300 468" fill="none" stroke="#ffe2d2" stroke-width="30" stroke-linecap="round"/>
-  <circle cx="212" cy="470" r="17" fill="#ffe2d2"/>
-  <circle cx="300" cy="470" r="17" fill="#ffe2d2"/>
+  <!-- muzzle -->
+  <ellipse cx="236" cy="274" rx="38" ry="31" fill="#fff4e6"/>
+  <ellipse cx="276" cy="274" rx="38" ry="31" fill="#fff4e6"/>
 
-  <!-- ===== neck ===== -->
-  <ellipse cx="256" cy="392" rx="34" ry="30" fill="#f0c3ad"/>
+  <!-- eyes -->
+  <ellipse cx="203" cy="225" rx="22" ry="24" fill="#2d2543"/>
+  <ellipse cx="309" cy="225" rx="22" ry="24" fill="#2d2543"/>
+  <circle cx="196" cy="218" r="7" fill="#ffffff"/>
+  <circle cx="302" cy="218" r="7" fill="#ffffff"/>
+  <circle cx="208" cy="233" r="3.5" fill="#ffffff" opacity="0.9"/>
+  <circle cx="314" cy="233" r="3.5" fill="#ffffff" opacity="0.9"/>
 
-  <!-- ===== hair cap (behind face) + face ===== -->
-  <ellipse cx="256" cy="196" rx="172" ry="166" fill="url(#hair)"/>
-  <ellipse cx="256" cy="258" rx="144" ry="136" fill="#ffe6d7"/>
+  <!-- cheeks -->
+  <ellipse cx="171" cy="272" rx="25" ry="12" fill="url(#blush)"/>
+  <ellipse cx="341" cy="272" rx="25" ry="12" fill="url(#blush)"/>
 
-  <!-- ===== bangs over forehead ===== -->
-  <path d="M104 160 Q256 96 408 160 L408 176 Q388 236 344 208 Q332 250 296 214 Q272 258 244 214 Q210 254 190 210 Q150 244 128 190 Z" fill="#6fd35c"/>
-  <path d="M150 176 Q186 240 224 176 Z" fill="#5cc44e" opacity="0.5"/>
-  <path d="M300 176 Q338 240 374 176 Z" fill="#5cc44e" opacity="0.5"/>
-  <!-- ahoge (cowlick) -->
-  <path d="M256 42 q22 -34 48 -26 q-22 12 -34 40" fill="none" stroke="#7fe06a" stroke-width="13" stroke-linecap="round"/>
+  <!-- nose + happy smile -->
+  <path d="M247 263 Q256 257 265 263 Q264 274 256 277 Q248 274 247 263 Z" fill="#f27996"/>
+  <path d="M256 277 Q256 287 244 287" fill="none" stroke="#815064" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M256 277 Q256 287 268 287" fill="none" stroke="#815064" stroke-width="4.5" stroke-linecap="round"/>
 
-  <!-- ===== hair flower accessory ===== -->
-  <g transform="translate(360 132)">
-    <g fill="#ff9ec4">
-      <ellipse cx="0" cy="-20" rx="12" ry="16"/>
-      <ellipse cx="19" cy="-6" rx="12" ry="16" transform="rotate(72)"/>
-      <ellipse cx="12" cy="16" rx="12" ry="16" transform="rotate(144)"/>
-      <ellipse cx="-12" cy="16" rx="12" ry="16" transform="rotate(216)"/>
-      <ellipse cx="-19" cy="-6" rx="12" ry="16" transform="rotate(288)"/>
-    </g>
-    <circle cx="0" cy="0" r="9" fill="#ffe36e"/>
+  <!-- whiskers -->
+  <path d="M144 263 q22 4 36 0" fill="none" stroke="#cf9169" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+  <path d="M145 280 q21 1 35 -4" fill="none" stroke="#cf9169" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+  <path d="M368 263 q-22 4 -36 0" fill="none" stroke="#cf9169" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+  <path d="M367 280 q-21 1 -35 -4" fill="none" stroke="#cf9169" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+
+  <!-- paws holding the download card -->
+  <path d="M160 349 C139 352 129 369 137 385 C145 400 170 401 184 390" fill="url(#fur)" filter="url(#pawShadow)"/>
+  <path d="M352 349 C373 352 383 369 375 385 C367 400 342 401 328 390" fill="url(#fur)" filter="url(#pawShadow)"/>
+
+  <!-- download card -->
+  <g filter="url(#cardShadow)">
+    <rect x="152" y="324" width="208" height="154" rx="30" fill="url(#card)"/>
   </g>
 
-  <!-- ===== eyebrows ===== -->
-  <path d="M168 232 Q200 214 234 228" fill="none" stroke="#6a8f52" stroke-width="7" stroke-linecap="round"/>
-  <path d="M278 228 Q312 214 344 232" fill="none" stroke="#6a8f52" stroke-width="7" stroke-linecap="round"/>
+  <!-- download arrow -->
+  <path d="M256 351 V411" fill="none" stroke="url(#arrow)" stroke-width="23" stroke-linecap="round"/>
+  <path d="M227 388 L256 417 L285 388" fill="none" stroke="url(#arrow)" stroke-width="23" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M218 433 V445 H294 V433" fill="none" stroke="url(#arrow)" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>
 
-  <!-- ===== big shiny eyes ===== -->
-  <!-- whites -->
-  <ellipse cx="200" cy="292" rx="42" ry="48" fill="#ffffff"/>
-  <ellipse cx="312" cy="292" rx="42" ry="48" fill="#ffffff"/>
-  <!-- iris -->
-  <ellipse cx="202" cy="298" rx="32" ry="38" fill="url(#iris)"/>
-  <ellipse cx="310" cy="298" rx="32" ry="38" fill="url(#iris)"/>
-  <!-- pupils -->
-  <ellipse cx="204" cy="302" rx="15" ry="20" fill="#123528"/>
-  <ellipse cx="308" cy="302" rx="15" ry="20" fill="#123528"/>
-  <!-- big highlight (upper-left) -->
-  <circle cx="188" cy="282" r="12" fill="#ffffff"/>
-  <circle cx="296" cy="282" r="12" fill="#ffffff"/>
-  <!-- small highlight (lower-right) -->
-  <circle cx="218" cy="314" r="6" fill="#ffffff" opacity="0.9"/>
-  <circle cx="326" cy="314" r="6" fill="#ffffff" opacity="0.9"/>
-  <!-- glint bottom -->
-  <circle cx="204" cy="322" r="4" fill="#ffffff" opacity="0.75"/>
-  <circle cx="308" cy="322" r="4" fill="#ffffff" opacity="0.75"/>
-  <!-- upper lashes -->
-  <path d="M156 274 Q200 246 244 274" fill="none" stroke="#3a2a2a" stroke-width="10" stroke-linecap="round"/>
-  <path d="M268 274 Q312 246 356 274" fill="none" stroke="#3a2a2a" stroke-width="10" stroke-linecap="round"/>
-  <!-- lash flicks -->
-  <path d="M152 272 q-8 -12 -6 -22" fill="none" stroke="#3a2a2a" stroke-width="7" stroke-linecap="round"/>
-  <path d="M360 272 q8 -12 6 -22" fill="none" stroke="#3a2a2a" stroke-width="7" stroke-linecap="round"/>
+  <!-- paw toes -->
+  <path d="M150 375 q8 5 17 1" fill="none" stroke="#dd9667" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+  <path d="M362 375 q-8 5 -17 1" fill="none" stroke="#dd9667" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
 
-  <!-- ===== blush ===== -->
-  <ellipse cx="158" cy="340" rx="28" ry="15" fill="url(#cheek)"/>
-  <ellipse cx="354" cy="340" rx="28" ry="15" fill="url(#cheek)"/>
-
-  <!-- ===== cute open smile + tongue ===== -->
-  <path d="M236 344 Q256 372 276 344 Q256 356 236 344 Z" fill="#c9626f"/>
-  <path d="M244 348 Q256 360 268 348 Z" fill="#ff9fb3"/>
-  <!-- tiny nose -->
-  <ellipse cx="256" cy="330" rx="4" ry="3" fill="#e7a58e"/>
-
-  <!-- ===== sparkles ===== -->
-  <path d="M430 118 l6 15 15 6 -15 6 -6 15 -6 -15 -15 -6 15 -6 z" fill="#ffe36e"/>
-  <path d="M82 150 l5 12 12 5 -12 5 -5 12 -5 -12 -12 -5 12 -5 z" fill="#ffe36e"/>
-  <path d="M452 300 l4 9 9 4 -9 4 -4 9 -4 -9 -9 -4 9 -4 z" fill="#ffd1e6"/>
+  <!-- tiny sparkles -->
+  <path d="M98 118 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5 z" fill="#ffdf86"/>
+  <path d="M421 128 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4 z" fill="#cbbfff"/>
 </svg>
