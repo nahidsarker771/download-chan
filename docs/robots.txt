@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nahidsarker771.github.io/download-chan/sitemap.xml

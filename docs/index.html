@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Download Chan — paste a link, get the file</title>
+<meta name="description" content="Download Chan is a free Android download manager. Copy a link and it starts downloading: videos, MP3 audio, PDFs, ZIPs and APKs. Multi-thread downloads, social video support, no server.">
+<link rel="canonical" href="https://nahidsarker771.github.io/download-chan/">
+<meta name="robots" content="index,follow">
+<meta name="theme-color" content="#14110f">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Download Chan">
+<meta property="og:title" content="Download Chan — paste a link, get the file">
+<meta property="og:description" content="Download Chan is a free Android download manager. Copy a link and it starts downloading: videos, MP3 audio, PDFs, ZIPs and APKs. Multi-thread downloads, social video support, no server.">
+<meta property="og:url" content="https://nahidsarker771.github.io/download-chan/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Download Chan — paste a link, get the file">
+<meta name="twitter:description" content="Download Chan is a free Android download manager. Copy a link and it starts downloading: videos, MP3 audio, PDFs, ZIPs and APKs. Multi-thread downloads, social video support, no server.">
+<link rel="icon" href="icon.svg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Download Chan","description":"Download Chan is a free Android download manager. Copy a link and it starts downloading: videos, MP3 audio, PDFs, ZIPs and APKs. Multi-thread downloads, social video support, no server.","url":"https://nahidsarker771.github.io/download-chan/","applicationCategory":"UtilitiesApplication","operatingSystem":"Android","softwareVersion":"2.1.1","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"downloadUrl":"https://github.com/nahidsarker771/download-chan/releases/latest/download/Download-Chan.apk","author":{"@type":"Person","name":"Nahid","url":"https://nahidsarker771.github.io/"}}
+</script>
+<style>
+:root{
+  --bg:#14110f; --bg2:#1c1815; --card:#211c18; --card2:#191512;
+  --ink:#fff4e8; --muted:#b7a595; --line:#332a23;
+  --accent:#ff7a45; --accent2:#ffc46b; --on-accent:#1a100a;
+  --glow:rgba(255,122,69,.24); --radius:24px; --max:1120px;
+  --shadow:0 20px 60px -24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(60vw 60vw at 85% -10%,var(--glow),transparent 70%),
+  radial-gradient(50vw 50vw at -10% 30%,var(--glow),transparent 70%);
+  opacity:.55;pointer-events:none}
+a{color:inherit}
+img,svg{max-width:100%}
+.wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 24px}
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;height:70px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;text-decoration:none;font-size:17px}
+.mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--accent);color:var(--on-accent);font-size:17px;box-shadow:0 6px 18px -6px var(--accent)}
+.nav-links{display:flex;align-items:center;gap:26px;font-size:14px;font-weight:600}
+.nav-links a{text-decoration:none;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:14px;padding:13px 20px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid transparent;transition:transform .18s ease,box-shadow .18s ease,background .18s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--accent);color:var(--on-accent);box-shadow:0 12px 30px -12px var(--accent)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{background:var(--card)}
+.btn-sm{padding:10px 16px;font-size:14px;border-radius:12px}
+.hero{padding:64px 0 40px}
+.hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:56px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--muted);background:var(--card);border:1px solid var(--line);padding:7px 13px;border-radius:999px;margin-bottom:22px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+h1{font-size:clamp(2.5rem,6.2vw,4.35rem);line-height:1.02;letter-spacing:-.045em;margin:0 0 22px;font-weight:850}
+h1 em{font-style:normal;color:var(--accent);position:relative;white-space:nowrap}
+.lede{font-size:clamp(1.02rem,2vw,1.18rem);color:var(--muted);max-width:52ch;margin:0 0 28px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:12.5px;font-weight:650;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:color-mix(in srgb,var(--card) 70%,transparent)}
+.visual{position:relative;display:flex;justify-content:center;min-height:450px;align-items:center}
+.phone{width:290px;max-width:100%;border-radius:38px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);padding:12px;position:relative;transform:rotate(-2deg)}
+.phone::after{content:"";position:absolute;inset:0;border-radius:38px;border:1px solid color-mix(in srgb,var(--ink) 10%,transparent);pointer-events:none}
+.screen{background:var(--bg2);border-radius:28px;overflow:hidden;border:1px solid var(--line);min-height:390px;display:flex;flex-direction:column}
+.statusbar{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:700;color:var(--muted);padding:10px 16px 2px;letter-spacing:.02em}
+.notch{width:52px;height:5px;border-radius:9px;background:color-mix(in srgb,var(--ink) 22%,transparent)}
+.app-head{padding:14px 16px 8px}
+.app-kicker{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.app-h{font-size:19px;font-weight:800;letter-spacing:-.02em;margin-top:3px}
+.app-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.screen-body{padding:8px 14px 12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:9px 11px}
+.row .tick{width:20px;height:20px;border-radius:7px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);flex:0 0 auto}
+.row .tick svg{width:12px;height:12px}
+.row .txt{min-width:0;flex:1}
+.row .t1{font-size:11.5px;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t2{font-size:9.5px;color:var(--muted);margin-top:1px}
+.row .pill{font-size:9px;font-weight:800;color:var(--accent);background:color-mix(in srgb,var(--accent) 13%,transparent);border-radius:999px;padding:2px 7px;white-space:nowrap}
+.progress{height:7px;border-radius:99px;background:color-mix(in srgb,var(--ink) 10%,transparent);overflow:hidden}
+.progress i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.big-ring{width:112px;height:112px;border-radius:50%;margin:4px auto 2px;display:grid;place-items:center;position:relative;background:conic-gradient(var(--accent) 0 72%,color-mix(in srgb,var(--ink) 9%,transparent) 72% 100%)}
+.big-ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--bg2)}
+.big-ring div{position:relative;text-align:center;line-height:1.1}
+.big-ring b{font-size:25px;display:block;letter-spacing:-.03em}
+.big-ring span{font-size:8.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:800}
+.bars{display:flex;align-items:flex-end;gap:6px;height:56px;padding:4px 2px 0}
+.bars i{flex:1;border-radius:5px 5px 2px 2px;background:color-mix(in srgb,var(--accent) 34%,transparent)}
+.bars i:nth-child(3n){background:var(--accent)}
+.float{position:absolute;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:11px 14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;font-size:12px;font-weight:700}
+.float .ico{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
+.float .ico svg{width:15px;height:15px}
+.float small{display:block;font-size:9.5px;color:var(--muted);font-weight:600;letter-spacing:.01em}
+.f1{top:18px;left:-6px;transform:rotate(-4deg)}
+.f2{bottom:26px;right:-8px;transform:rotate(3deg)}
+.section{padding:64px 0}
+.section-head{max-width:660px;margin-bottom:32px}
+.kicker{font-size:12.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+h2{font-size:clamp(1.8rem,4vw,2.7rem);letter-spacing:-.035em;line-height:1.08;margin:0 0 12px;font-weight:820}
+.section-head p{color:var(--muted);margin:0;font-size:1.02rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:22px 0 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.stat b{display:block;font-size:clamp(1.4rem,3vw,1.9rem);letter-spacing:-.04em;line-height:1.1}
+.stat span{font-size:12px;color:var(--muted);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;transition:transform .2s ease,border-color .2s}
+.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+.card .ico{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent);margin-bottom:16px}
+.card .ico svg{width:21px;height:21px}
+.card h3{margin:0 0 7px;font-size:16.5px;letter-spacing:-.01em}
+.card p{margin:0;font-size:14px;color:var(--muted);line-height:1.55}
+.split{display:grid;grid-template-columns:1.04fr .96fr;gap:44px;align-items:start}
+.prose p{color:var(--muted);margin:0 0 14px;font-size:15.5px}
+.prose strong{color:var(--ink)}
+.quote{border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:22px 0;font-size:15px;color:var(--ink);font-weight:600}
+.spec{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.spec-row{display:flex;justify-content:space-between;gap:18px;padding:13px 18px;border-bottom:1px solid var(--line);font-size:13.5px}
+.spec-row:last-child{border-bottom:0}
+.spec-row span:first-child{color:var(--muted);font-weight:600}
+.spec-row span:last-child{font-weight:700;text-align:right}
+.band{margin:20px 0;border-radius:28px;border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));background:
+  radial-gradient(70% 140% at 100% 0%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%),
+  var(--card);padding:clamp(26px,5vw,48px);display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:center;position:relative;overflow:hidden}
+.band h2{margin-bottom:10px}
+.band p{color:var(--muted);margin:0 0 20px;font-size:15px;max-width:44ch}
+.band .btn-primary{box-shadow:0 16px 40px -14px var(--accent)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.steps li{display:flex;gap:12px;font-size:13.5px;align-items:flex-start;color:var(--muted)}
+.steps b{flex:0 0 24px;height:24px;border-radius:8px;display:grid;place-items:center;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);font-size:11px}
+.steps strong{color:var(--ink)}
+.dev{display:flex;align-items:center;justify-content:space-between;gap:26px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px 28px;margin-bottom:8px}
+.dev h3{margin:0 0 5px;font-size:17px;letter-spacing:-.01em}
+.dev p{margin:0;color:var(--muted);font-size:13.5px;max-width:62ch}
+.dev-actions{display:flex;gap:10px;flex-wrap:wrap}
+.tech{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}
+.tech span{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:7px;padding:3px 8px;background:var(--bg)}
+footer{border-top:1px solid var(--line);margin-top:44px;padding:30px 0 44px}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:13px}
+.foot-links{display:flex;gap:18px;flex-wrap:wrap}
+.foot a{color:var(--muted);text-decoration:none}
+.foot a:hover{color:var(--ink)}
+.note{font-size:12px;color:var(--muted);margin-top:14px;max-width:60ch}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:980px){
+  .hero-grid{grid-template-columns:1fr;gap:32px}
+  .visual{min-height:400px;order:2}
+  .hero{padding-top:40px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .split{grid-template-columns:1fr;gap:28px}
+  .band{grid-template-columns:1fr;gap:24px}
+}
+@media (max-width:720px){
+  .nav-links{display:none}
+  .wrap{padding:0 18px}
+  .hero{padding:30px 0 16px}
+  .section{padding:44px 0}
+  .grid{grid-template-columns:1fr}
+  .f1{left:-2px;top:6px}
+  .f2{right:-2px;bottom:8px}
+  .phone{transform:rotate(0)}
+  .cta-row .btn{flex:1 1 auto}
+  .dev{padding:22px}
+  .spec-row{font-size:12.5px}
+}
+@media (max-width:400px){
+  .float{display:none}
+  h1{font-size:2.3rem}
+  .stat{padding:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="./"><span class="mark">⬇️</span>Download Chan</a>
+  <nav class="nav-links" aria-label="Main">
+    <a href="#features">Features</a><a href="#about">About</a><a href="#download">Download</a>
+    <a href="https://github.com/nahidsarker771/download-chan" rel="noopener">GitHub</a>
+  </nav>
+  <a class="btn btn-primary btn-sm" href="https://github.com/nahidsarker771/download-chan/releases/latest/download/Download-Chan.apk">Download APK</a>
+</div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>Android · sideload · on-device</span>
+      <h1>Paste. Tap. <em>Done.</em></h1>
+      <p class="lede">Download Chan is the download manager your phone should have shipped with. Copy a link, open the app, and the file is already on its way — videos, audio, PDFs, ZIPs, APKs.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/nahidsarker771/download-chan/releases/latest/download/Download-Chan.apk">Download APK</a>
+        <a class="btn btn-ghost" href="https://github.com/nahidsarker771/download-chan" rel="noopener">View on GitHub</a>
+      </div>
+      <div class="chips"><span class="chip">v2.1.1</span><span class="chip">Android 11+</span><span class="chip">9+ sites</span><span class="chip">No server</span><span class="chip">Free</span></div>
+    </div>
+    <div class="visual" aria-hidden="true">
+      <div class="phone"><div class="screen">
+  <div class="statusbar"><span>9:41</span><span class="notch"></span><span>▮▮▮</span></div>
+  <div class="app-head"><div class="app-kicker">Link detected</div><div class="app-h">Downloading…</div><div class="app-sub">youtube.com/watch?v=…</div></div>
+  <div class="screen-body">
+    <div class="row" style="align-items:flex-start"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg></span><div class="txt"><div class="t1">lofi mix for late study</div><div class="t2">MP4 · 1080p · 84 MB</div><div class="progress" style="margin-top:7px"><i style="width:68%"></i></div></div><span class="pill">68%</span></div>
+    <div class="row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h8l4 4v14H6V3Z"/><path d="M14 3v5h4"/></svg></span><div class="txt"><div class="t1">lecture-notes.pdf</div><div class="t2">2.4 MB · completed</div></div><span class="pill">Open</span></div>
+    <div class="row"><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3.5 12a8.5 8.5 0 1 1 17 0 8.5 8.5 0 0 1-17 0Z"/><path d="M10 9l5 3-5 3V9Z"/></svg></span><div class="txt"><div class="t1">reel · saved offline</div><div class="t2">MP4 · 12 MB</div></div><span class="pill">Done</span></div>
+    <div style="margin-top:auto;display:flex;gap:6px;font-size:9px;font-weight:800;color:var(--muted);text-align:center"><span style="flex:1;padding:7px;border-radius:9px;background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)">Home</span><span style="flex:1;padding:7px">Files</span><span style="flex:1;padding:7px">Settings</span></div>
+  </div>
+</div></div>
+<div class="float f1"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></span><div>16 connections<small>multi-thread</small></div></div>
+<div class="float f2"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg></span><div>Paste → auto-start<small>no extra taps</small></div></div>
+    </div>
+  </div>
+  <div class="stats"><div class="stat"><b>1–16</b><span>parallel connections</span></div><div class="stat"><b>9+</b><span>supported sites</span></div><div class="stat"><b>MP3</b><span>audio extraction</span></div><div class="stat"><b>0</b><span>ads or trackers</span></div></div>
+</div></section>
+
+<section class="section" id="features"><div class="wrap">
+  <div class="section-head">
+    <div class="kicker">What's inside</div>
+    <h2>Everything between “I want that file” and “it's on my phone”.</h2>
+    <p>No browser tabs, no sketchy download sites, no 47-step wizard. Just a clean queue.</p>
+  </div>
+  <div class="grid"><article class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4.5" width="14" height="17" rx="3"/><path d="M9 4.5V3.5h6v1"/><path d="M9 10h6M9 14h6M9 18h3"/></svg></div><h3>Clipboard auto-download</h3><p>Copy a link, switch to the app, and it starts. A 24-hour duplicate guard stops accidental repeats, and you can switch it off in Settings.</p></article><article class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg></div><h3>Multi-thread engine</h3><p>Up to 16 parallel connections for direct links, ADM-style. If the server doesn't support ranges, it quietly falls back to a single connection.</p></article><article class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg></div><h3>Video → MP3</h3><p>Save video as MP4, or pull the audio out as MP3 when you only want the sound.</p></article><article class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></div><h3>Social video support</h3><p>YouTube, Instagram, Facebook, TikTok, Douyin, X/Twitter, Vimeo and Reddit via a bundled yt-dlp extractor — no external server involved.</p></article><article class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10" width="15" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h3>Cookies import</h3><p>Import a cookies.txt from your browser for private or login-walled posts that need it.</p></article><article class="card"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6V3Z"/><path d="M14 3v5h4"/><path d="M9 13h6M9 17h6"/></svg></div><h3>Share sheet + clean files tab</h3><p>Send a link from any app straight to Download Chan. Expand details, cancel, retry, open, share or delete from one place.</p></article></div>
+</div></section>
+
+<section class="section" id="about"><div class="wrap">
+  <div class="split">
+    <div class="prose">
+      <div class="kicker">About the project</div>
+      <h2>A download manager that stays out of the way.</h2>
+      <p>Download Chan is a small Capacitor app with a native Java download engine. The heavy lifting — yt-dlp and ffmpeg — is bundled inside the APK, so nothing is proxied through someone else's server.</p>
+ <p>Files land in <strong>Downloads / Download Chan</strong> when Android's “All files access” permission is granted. If you'd rather not grant it, the app falls back to its private folder and tells you exactly where the file went.</p>
+ <div class="quote">“A download button should download the thing. That's the whole product.”</div>
+ <p>It is a sideload build: debug-signed, no Play Store, no telemetry. The 109 MB download is mostly the bundled video engine and ffmpeg binaries.</p>
+    </div>
+    <div class="spec"><div class="spec-row"><span>Version</span><span>2.1.1</span></div><div class="spec-row"><span>Size</span><span>109 MB</span></div><div class="spec-row"><span>Android</span><span>11.0+ (minSdk 30)</span></div><div class="spec-row"><span>Engine</span><span>Native Java + yt-dlp</span></div><div class="spec-row"><span>Storage</span><span>Public Downloads (optional)</span></div><div class="spec-row"><span>Price</span><span>Free</span></div><div class="spec-row"><span>Ads / trackers</span><span>None</span></div><div class="spec-row"><span>Source</span><span>GitHub</span></div></div>
+  </div>
+</div></section>
+
+<section class="section" id="download"><div class="wrap">
+  <div class="band">
+    <div>
+      <div class="kicker">Free · no account</div>
+      <h2>One APK. No account. No server.</h2>
+      <p>Download the APK, allow install from your browser, and you're done. It installs over older Download Chan builds with your data intact.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/nahidsarker771/download-chan/releases/latest/download/Download-Chan.apk">Download APK <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg></a>
+        <a class="btn btn-ghost" href="https://github.com/nahidsarker771/download-chan" rel="noopener">View source</a>
+      </div>
+      <p class="note">109 MB is normal — the APK bundles yt-dlp and ffmpeg so social downloads work without a server. Only download content you own or have permission to save.</p>
+    </div>
+    <ol class="steps"><li><b>1</b><div><strong>Download the APK</strong> 109 MB, debug-signed.</div></li><li><b>2</b><div><strong>Allow install from your browser</strong> this is a sideload build.</div></li><li><b>3</b><div><strong>Copy a link</strong> and open Download Chan.</div></li></ol>
+  </div>
+
+  <div class="dev">
+    <div>
+      <h3>For the builders 👀</h3>
+      <p>Capacitor web UI over a native Java plugin, with yt-dlp/ffmpeg bundled for offline extraction. The app can update its own extractor engine.</p>
+      <div class="tech"><span>Capacitor</span><span>Java</span><span>yt-dlp</span><span>ffmpeg</span><span>Android</span></div>
+    </div>
+    <div class="dev-actions">
+      <a class="btn btn-ghost btn-sm" href="https://github.com/nahidsarker771/download-chan" rel="noopener">GitHub repo</a>
+      <a class="btn btn-ghost btn-sm" href="https://nahidsarker771.github.io/" rel="noopener">More projects</a>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap foot">
+  <div>Made by <strong>Nahid</strong> · student &amp; vibe coder · <a href="https://nahidsarker771.github.io/">all projects</a></div>
+  <div class="foot-links">
+    <a href="https://github.com/nahidsarker771/download-chan" rel="noopener">GitHub</a>
+    <a href="https://github.com/nahidsarker771/download-chan/releases/latest/download/Download-Chan.apk">APK</a>
+    <a href="#features">Features</a>
+  </div>
+</div></footer>
+</body>
+</html>
